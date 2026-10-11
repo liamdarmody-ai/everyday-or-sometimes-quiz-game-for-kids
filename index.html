@@ -1,0 +1,2024 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Everyday or Sometimes? The Kids' Food Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #fdf6e3;
+        --bg-soft: #f3ecd2;
+        --card: #ffffff;
+        --ink: #22301c;
+        --ink-soft: #55624c;
+        --green: #2e9e4f;
+        --green-dark: #1f7a3a;
+        --green-soft: #dff3e2;
+        --orange: #f08c1e;
+        --orange-dark: #c96f0c;
+        --orange-soft: #fdeeda;
+        --berry: #d94f6a;
+        --berry-soft: #fbe3e8;
+        --sky: #2f8fd0;
+        --shadow: 0 6px 0 rgba(34, 48, 28, 0.12), 0 14px 28px rgba(34, 48, 28, 0.10);
+        --radius: 22px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #16241a;
+          --bg-soft: #1d2f21;
+          --card: #223627;
+          --ink: #f2f7ec;
+          --ink-soft: #b9c9ae;
+          --green: #4cc26e;
+          --green-dark: #35a556;
+          --green-soft: #274a30;
+          --orange: #ffa63d;
+          --orange-dark: #e08a1f;
+          --orange-soft: #4a3a1e;
+          --berry: #f0708a;
+          --berry-soft: #4a2730;
+          --sky: #5cb3ec;
+          --shadow: 0 6px 0 rgba(0, 0, 0, 0.35), 0 14px 28px rgba(0, 0, 0, 0.35);
+        }
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: "Nunito", system-ui, sans-serif;
+        background:
+          radial-gradient(circle at 12% 8%, var(--green-soft) 0, transparent 34%),
+          radial-gradient(circle at 88% 92%, var(--orange-soft) 0, transparent 36%),
+          var(--bg);
+        color: var(--ink);
+        min-height: 100vh;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .wrap {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 20px 16px 48px;
+      }
+
+      h1, h2, h3, .display { font-family: "Fredoka", "Nunito", sans-serif; }
+
+      /* ---------- header ---------- */
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+      .brand {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 700;
+        font-size: 1.05rem;
+        letter-spacing: 0.02em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .brand .dot {
+        width: 12px; height: 12px; border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 0 4px var(--green-soft);
+      }
+      .hud {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .hud-chip {
+        background: var(--card);
+        border: 2px solid var(--bg-soft);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-weight: 900;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 3px 0 rgba(34, 48, 28, 0.08);
+      }
+      .hud-chip .star { color: var(--orange); font-size: 1.1rem; line-height: 1; }
+      .hud-chip .flame { color: var(--berry); font-size: 1.05rem; line-height: 1; }
+
+      /* ---------- hero / start ---------- */
+      .hero {
+        background: var(--card);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        padding: 30px 24px 26px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 10px;
+        background: repeating-linear-gradient(90deg, var(--green) 0 34px, var(--orange) 34px 68px, var(--berry) 68px 102px, var(--sky) 102px 136px);
+      }
+      .hero h1 {
+        font-size: clamp(2rem, 7.5vw, 3rem);
+        line-height: 1.05;
+        margin: 10px 0 8px;
+        font-weight: 700;
+      }
+      .hero h1 .hl-green { color: var(--green); }
+      .hero h1 .hl-orange { color: var(--orange); }
+      .hero p.lede {
+        font-size: 1.08rem;
+        font-weight: 700;
+        color: var(--ink-soft);
+        margin: 0 auto 6px;
+        max-width: 46ch;
+        line-height: 1.5;
+      }
+      .food-parade {
+        font-size: clamp(1.7rem, 6vw, 2.3rem);
+        letter-spacing: 0.18em;
+        margin: 14px 0 4px;
+        user-select: none;
+      }
+
+      .section-label {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        text-align: center;
+        margin: 22px 0 10px;
+      }
+
+      .mode-row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .mode-card {
+        flex: 1 1 220px;
+        max-width: 300px;
+        text-align: left;
+        background: var(--bg);
+        border: 3px solid var(--bg-soft);
+        border-radius: var(--radius);
+        padding: 16px 18px;
+        cursor: pointer;
+        font-family: inherit;
+        color: var(--ink);
+        transition: transform 0.08s ease, border-color 0.15s ease, background 0.15s ease;
+      }
+      .mode-card:hover { transform: translateY(-2px); }
+      .mode-card.selected { border-color: var(--orange); background: var(--orange-soft); }
+      .mode-card .mode-emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
+      .mode-card .mode-name {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 600;
+        font-size: 1.25rem;
+        display: block;
+      }
+      .mode-card .mode-desc {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--ink-soft);
+        line-height: 1.45;
+        display: block;
+        margin-top: 2px;
+      }
+
+      .big-btn {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 700;
+        font-size: 1.35rem;
+        letter-spacing: 0.02em;
+        border: none;
+        border-radius: 999px;
+        padding: 16px 44px;
+        cursor: pointer;
+        color: #fff;
+        background: var(--green);
+        box-shadow: 0 6px 0 var(--green-dark);
+        transition: transform 0.08s ease, box-shadow 0.08s ease;
+        margin-top: 24px;
+      }
+      .big-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 0 var(--green-dark); }
+      .big-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--green-dark); }
+      .big-btn.orange { background: var(--orange); box-shadow: 0 6px 0 var(--orange-dark); }
+      .big-btn.orange:hover { box-shadow: 0 8px 0 var(--orange-dark); }
+      .big-btn.orange:active { box-shadow: 0 2px 0 var(--orange-dark); }
+
+      .howto {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        text-align: left;
+      }
+      .howto .tile {
+        border-radius: var(--radius);
+        padding: 14px 16px;
+        font-weight: 800;
+        font-size: 0.95rem;
+        line-height: 1.45;
+      }
+      .tile.everyday { background: var(--green-soft); }
+      .tile.sometimes { background: var(--berry-soft); }
+      .tile .tile-title {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 600;
+        font-size: 1.05rem;
+        display: block;
+        margin-bottom: 2px;
+      }
+      .tile.everyday .tile-title { color: var(--green-dark); }
+      @media (prefers-color-scheme: dark) {
+        .tile.everyday .tile-title { color: var(--green); }
+      }
+      .tile.sometimes .tile-title { color: var(--berry); }
+      @media (max-width: 480px) {
+        .howto { grid-template-columns: 1fr; }
+      }
+
+      /* ---------- game ---------- */
+      .progress-track {
+        height: 16px;
+        background: var(--bg-soft);
+        border-radius: 999px;
+        overflow: hidden;
+        margin: 6px 0 16px;
+      }
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: repeating-linear-gradient(45deg, var(--green) 0 16px, var(--green-dark) 16px 32px);
+        border-radius: 999px;
+        transition: width 0.45s ease;
+      }
+      .round-label {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 600;
+        color: var(--ink-soft);
+        font-size: 1rem;
+        text-align: center;
+      }
+
+      .stage {
+        background: var(--card);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        padding: 26px 22px 24px;
+        text-align: center;
+      }
+      .prompt {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 600;
+        font-size: clamp(1.25rem, 4.6vw, 1.6rem);
+        line-height: 1.3;
+        margin: 0 0 6px;
+      }
+      .food-stage {
+        padding: 18px 0 8px;
+      }
+      .food-emoji {
+        font-size: clamp(5.2rem, 22vw, 7.5rem);
+        line-height: 1.1;
+        display: inline-block;
+        animation: bob 2.2s ease-in-out infinite;
+        user-select: none;
+      }
+      @keyframes bob {
+        0%, 100% { transform: translateY(0) rotate(-2deg); }
+        50% { transform: translateY(-9px) rotate(2deg); }
+      }
+      .food-name {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 700;
+        font-size: clamp(1.7rem, 6.5vw, 2.3rem);
+        margin: 4px 0 2px;
+      }
+
+      .answer-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 18px;
+      }
+      @media (max-width: 480px) {
+        .answer-row { grid-template-columns: 1fr; }
+      }
+      .answer-btn {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 700;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: var(--radius);
+        padding: 20px 14px;
+        cursor: pointer;
+        color: #fff;
+        line-height: 1.25;
+        transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.2s ease, filter 0.2s ease;
+      }
+      .answer-btn small {
+        display: block;
+        font-family: "Nunito", sans-serif;
+        font-weight: 800;
+        font-size: 0.82rem;
+        opacity: 0.92;
+        margin-top: 3px;
+      }
+      .answer-btn.everyday { background: var(--green); box-shadow: 0 6px 0 var(--green-dark); }
+      .answer-btn.sometimes { background: var(--berry); box-shadow: 0 6px 0 #a8374f; }
+      @media (prefers-color-scheme: dark) {
+        .answer-btn.sometimes { box-shadow: 0 6px 0 #7e2c3d; }
+      }
+      .answer-btn:active { transform: translateY(4px); }
+      .answer-btn.everyday:active { box-shadow: 0 2px 0 var(--green-dark); }
+      .answer-btn.sometimes:active { box-shadow: 0 2px 0 #a8374f; }
+      .answer-btn:disabled { cursor: default; }
+      .answer-btn.correct-pick { outline: 4px solid var(--ink); outline-offset: 2px; }
+      .answer-btn.dim { opacity: 0.45; filter: saturate(0.4); }
+
+      .swap-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 18px;
+      }
+      @media (max-width: 480px) {
+        .swap-row { grid-template-columns: 1fr; }
+      }
+      .swap-btn {
+        background: var(--bg);
+        border: 3px solid var(--bg-soft);
+        border-radius: var(--radius);
+        padding: 18px 12px 14px;
+        cursor: pointer;
+        font-family: inherit;
+        color: var(--ink);
+        transition: transform 0.08s ease, border-color 0.15s ease, opacity 0.2s ease, filter 0.2s ease;
+      }
+      .swap-btn:hover { transform: translateY(-2px); }
+      .swap-btn .swap-emoji { font-size: 3.4rem; display: block; line-height: 1.15; }
+      .swap-btn .swap-name {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 600;
+        font-size: 1.15rem;
+        display: block;
+        margin-top: 4px;
+      }
+      .swap-btn:disabled { cursor: default; }
+      .swap-btn.correct-pick { border-color: var(--green); background: var(--green-soft); }
+      .swap-btn.dim { opacity: 0.45; filter: saturate(0.4); }
+
+      .feedback {
+        margin-top: 18px;
+        border-radius: var(--radius);
+        padding: 16px 18px;
+        text-align: left;
+        display: none;
+      }
+      .feedback.show { display: block; animation: pop 0.25s ease; }
+      @keyframes pop {
+        from { transform: scale(0.96); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+      }
+      .feedback.good { background: var(--green-soft); }
+      .feedback.oops { background: var(--orange-soft); }
+      .feedback .fb-title {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 700;
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 3px;
+      }
+      .feedback.good .fb-title { color: var(--green-dark); }
+      @media (prefers-color-scheme: dark) {
+        .feedback.good .fb-title { color: var(--green); }
+      }
+      .feedback.oops .fb-title { color: var(--orange-dark); }
+      @media (prefers-color-scheme: dark) {
+        .feedback.oops .fb-title { color: var(--orange); }
+      }
+      .feedback p {
+        margin: 0;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+      .fb-block {
+        margin-top: 12px;
+        background: rgba(255,255,255,0.55);
+        border-radius: 14px;
+        padding: 10px 12px;
+      }
+      @media (prefers-color-scheme: dark) {
+        .fb-block { background: rgba(0,0,0,0.22); }
+      }
+      .fb-label {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 700;
+        font-size: 0.88rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 4px;
+        color: var(--ink);
+      }
+      .fb-block p {
+        font-size: 1.07rem;
+        line-height: 1.55;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .fb-more-btn {
+        margin-top: 12px;
+        font-family: "Fredoka", sans-serif;
+        font-weight: 600;
+        font-size: 0.98rem;
+        background: var(--card);
+        color: var(--ink);
+        border: 2px solid var(--bg-soft);
+        border-radius: 999px;
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+      .fb-extra {
+        margin-top: 10px !important;
+        font-size: 1rem !important;
+        background: var(--card);
+        border-radius: 12px;
+        padding: 10px 12px;
+        line-height: 1.5 !important;
+      }
+      .next-row { text-align: center; }
+
+      /* ---------- results ---------- */
+      .results { text-align: center; }
+      .results .big-stars {
+        font-size: 3rem;
+        letter-spacing: 0.12em;
+        color: var(--bg-soft);
+        line-height: 1.2;
+        user-select: none;
+      }
+      .results .big-stars .lit { color: var(--orange); }
+      .results h2 {
+        font-size: clamp(1.8rem, 6.5vw, 2.5rem);
+        margin: 8px 0 6px;
+        font-weight: 700;
+      }
+      .results p {
+        font-weight: 700;
+        color: var(--ink-soft);
+        font-size: 1.05rem;
+        line-height: 1.55;
+        max-width: 44ch;
+        margin: 0 auto;
+      }
+      .score-line {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 700;
+        font-size: 1.4rem;
+        margin: 14px 0 2px;
+      }
+      .result-btns {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .ghost-btn {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 600;
+        font-size: 1.15rem;
+        border: 3px solid var(--bg-soft);
+        background: var(--card);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 14px 32px;
+        cursor: pointer;
+        margin-top: 24px;
+        transition: transform 0.08s ease, border-color 0.15s ease;
+      }
+      .ghost-btn:hover { transform: translateY(-2px); border-color: var(--ink-soft); }
+
+      .text-link-btn {
+        background: none; border: none; cursor: pointer;
+        font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.05rem;
+        color: var(--ink-soft); text-decoration: underline; text-underline-offset: 4px;
+        padding: 10px 12px; margin-top: 16px;
+      }
+      .text-link-btn:hover { color: var(--ink); }
+      .play-sub { font-weight: 700; color: var(--ink-soft); margin: 10px auto 0; max-width: 44ch; line-height: 1.5; }
+      .grownups-note { font-size: .85rem; font-weight: 700; color: var(--ink-soft); text-align: center; max-width: 58ch; margin: 18px auto 0; line-height: 1.55; }
+
+      /* ---------- daily fuel five ---------- */
+      .daily-banner {
+        margin-top: 22px;
+        background: var(--green-soft);
+        border: 3px solid var(--green);
+        border-radius: var(--radius);
+        padding: 18px 18px 16px;
+        text-align: center;
+      }
+      .daily-banner .daily-kicker {
+        font-family: "Fredoka", sans-serif; font-weight: 700; letter-spacing: .05em;
+        text-transform: uppercase; font-size: .85rem; color: var(--green-dark);
+      }
+      @media (prefers-color-scheme: dark){ .daily-banner .daily-kicker{ color: var(--green);} }
+      .daily-banner h2 { margin: 4px 0 6px; font-size: 1.7rem; }
+      .daily-banner p { margin: 0 auto; font-weight: 700; color: var(--ink-soft); line-height: 1.5; max-width: 46ch; }
+      .daily-banner .daily-small { font-size: .88rem; margin-top: 10px; }
+      .daily-banner .big-btn { margin-top: 14px; }
+      /* ---------- show-up stars ---------- */
+      .showup-box {
+        margin-top: 16px;
+        background: var(--card);
+        border: 3px dashed var(--orange);
+        border-radius: 18px;
+        padding: 14px 14px 12px;
+        text-align: center;
+      }
+      .showup-title {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 700;
+        font-size: 1.15rem;
+        display: block;
+        letter-spacing: .02em;
+      }
+      .showup-trail {
+        font-size: 1.55rem;
+        line-height: 1.35;
+        letter-spacing: .08em;
+        margin: 6px 0 2px;
+        word-break: break-all;
+        min-height: 1.4em;
+      }
+      .showup-trail.empty { font-size: 1rem; font-weight: 800; color: var(--ink-soft); letter-spacing: 0; }
+      .showup-count {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin: 2px 0 6px !important;
+        color: var(--ink) !important;
+      }
+      .showup-note {
+        font-size: .96rem !important;
+        margin: 0 auto !important;
+        max-width: 48ch;
+      }
+      .showup-device {
+        font-size: .82rem !important;
+        margin-top: 8px !important;
+        opacity: .9;
+      }
+      .showup-result {
+        margin: 14px auto 4px;
+        background: var(--orange-soft);
+        border: 3px solid var(--orange);
+        border-radius: 18px;
+        padding: 14px 16px;
+        max-width: 480px;
+      }
+      .showup-result .sr-title {
+        font-family: "Fredoka", sans-serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        display: block;
+      }
+      .showup-result .sr-trail { font-size: 1.6rem; letter-spacing: .08em; margin: 6px 0 2px; line-height: 1.35; word-break: break-all; }
+      .showup-result p { margin: 4px auto 0 !important; font-size: .96rem !important; }
+      .repeat-badge {
+        display: inline-block; background: var(--orange-soft); color: var(--ink);
+        border: 2px solid var(--orange); border-radius: 999px; padding: 6px 14px;
+        font-weight: 900; font-size: .92rem; margin-bottom: 10px;
+      }
+      .wordle-row { font-size: 2.2rem; letter-spacing: .18em; margin: 14px 0 6px; line-height: 1.2; }
+      .copy-btn {
+        font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.05rem;
+        background: var(--card); color: var(--ink); border: 3px solid var(--green);
+        border-radius: 999px; padding: 12px 24px; cursor: pointer; margin-top: 10px;
+      }
+      /* ---------- label detective ---------- */
+      .label-card {
+        background: #fff; color: #111; border: 3px solid #111; border-radius: 14px;
+        padding: 16px 16px 12px; text-align: left; max-width: 440px; margin: 14px auto 4px;
+      }
+      @media (prefers-color-scheme: dark){ .label-card{ background:#fff; color:#111; } }
+      .label-product { font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 1.35rem; text-align:center; margin-bottom: 4px; }
+      .label-title { font-weight: 900; font-size: 1.05rem; border-top: 10px solid #111; border-bottom: 2px solid #111; padding: 6px 0; }
+      .label-row { display:flex; justify-content:space-between; gap:12px; border-bottom:1px solid #999; padding:7px 0; font-weight:800; font-size:1.05rem; }
+      .label-row strong { font-size:1.25rem; }
+      .label-ingredients { padding-top: 8px; font-size:.92rem; line-height:1.45; font-weight:700; }
+      .label-ingredients span { font-weight:900; }
+      .label-ingredients p { margin:3px 0 2px; }
+      .label-note { font-size:.8rem; font-weight:700; text-align:center; margin-top:8px; color:#444; }
+      /* ---------- missions ---------- */
+      .missions-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; text-align:left; }
+      @media (max-width:520px){ .missions-grid{ grid-template-columns:1fr; } }
+      .mission-card { background: var(--bg); border:3px solid var(--bg-soft); border-radius: var(--radius); padding:16px; }
+      .mission-card .m-emoji { font-size:2rem; display:block; margin-bottom:6px; }
+      .mission-card .m-title { font-family:"Fredoka",sans-serif; font-weight:600; font-size:1.15rem; display:block; }
+      .mission-card p { color: var(--ink-soft); font-weight:700; line-height:1.5; margin:6px 0 0; font-size:.95rem; }
+      .mission-featured { background: var(--orange-soft); border:3px solid var(--orange); border-radius: var(--radius); padding:18px; text-align:left; margin-top:14px; }
+      .mission-featured .m-kicker { font-family:"Fredoka",sans-serif; font-weight:700; letter-spacing:.05em; text-transform:uppercase; font-size:.85rem; color: var(--orange-dark); }
+      @media (prefers-color-scheme: dark){ .mission-featured .m-kicker{ color: var(--orange);} }
+      .mission-featured .m-title { font-family:"Fredoka",sans-serif; font-weight:700; font-size:1.5rem; display:block; margin-top:4px; }
+      .mission-featured p { font-weight:700; line-height:1.55; margin:6px 0 0; }
+
+      /* ---------- tier time ---------- */
+      .tier-ladder-intro { margin-top: 18px; text-align:left; background: var(--bg); border:3px solid var(--bg-soft); border-radius: var(--radius); padding:16px 18px; }
+      .tier-ladder-intro .t-title { font-family:"Fredoka",sans-serif; font-weight:700; font-size:1.2rem; display:block; margin-bottom:6px; }
+      .tier-ladder-intro p { font-weight:700; color:var(--ink-soft); line-height:1.55; margin:0 0 10px; }
+      .ladder { display:grid; gap:6px; }
+      .ladder-rung { border-radius:12px; padding:8px 12px; font-weight:900; font-size:.95rem; color:#fff; }
+      .ladder-rung small { display:block; font-weight:800; opacity:.92; font-size:.82rem; }
+      .rung-power { background: var(--green-dark); }
+      .rung-everyday { background: var(--green); }
+      .rung-middle { background: var(--orange-dark); }
+      .rung-sometimes { background: var(--berry); }
+      .tier-buttons { display:grid; gap:10px; margin-top:16px; }
+      @media (min-width:520px){ .tier-buttons{ grid-template-columns:1fr 1fr; } }
+      .tier-btn { font-family:"Fredoka",sans-serif; font-weight:700; font-size:1.1rem; border:none; border-radius:var(--radius); padding:16px 12px; cursor:pointer; color:#fff; line-height:1.25; transition:transform .08s ease, opacity .2s ease, filter .2s ease; }
+      .tier-btn small { display:block; font-family:"Nunito",sans-serif; font-weight:800; font-size:.8rem; opacity:.92; margin-top:3px; }
+      .tier-btn:active { transform: translateY(3px); }
+      .tier-btn:disabled { cursor:default; }
+      .tier-btn.correct-pick { outline:4px solid var(--ink); outline-offset:2px; }
+      .tier-btn.close-pick { outline:4px dashed var(--orange); outline-offset:2px; }
+      .tier-btn.dim { opacity:.45; filter:saturate(.4); }
+      .feedback.close { background: var(--orange-soft); }
+      .feedback.close .fb-title { color: var(--orange-dark); }
+      @media (prefers-color-scheme: dark){ .feedback.close .fb-title{ color: var(--orange);} }
+
+      .hidden { display: none !important; }
+
+      #confetti {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 50;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .food-emoji { animation: none; }
+        .feedback.show { animation: none; }
+        * { transition: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="confetti"></canvas>
+    <div class="wrap">
+
+      <div class="topbar">
+        <div class="brand"><span class="dot"></span> Food Quiz</div>
+      </div>
+
+      <!-- ============ START SCREEN ============ -->
+      <section id="screen-start">
+        <div class="hero">
+          <div class="food-parade" aria-hidden="true">🍎🥕🍓🥦🍌</div>
+          <h1>The <span class="hl-green">Everyday</span> or <span class="hl-orange">Sometimes</span> Game!</h1>
+          <p class="lede">Some foods help you grow strong and play all day. Some are yummy treats for once in a while. Can you sort them all out?</p>
+
+          <div class="howto">
+            <div class="tile everyday">
+              <span class="tile-title">💪 Everyday Foods</span>
+              Power foods! They help you run fast, think sharp, and grow strong. Eat these lots.
+            </div>
+            <div class="tile sometimes">
+              <span class="tile-title">🎉 Sometimes Foods</span>
+              Treat foods! Super tasty, just not for every day. A little bit, once in a while.
+            </div>
+          </div>
+
+          <div class="daily-banner">
+            <span class="daily-kicker">📅 Today's Quiz — <span id="daily-date-label">Today</span></span>
+            <h2>Daily Fuel Five</h2>
+            <p>Five questions, the same all day — just like Wordle. A mix of sorting, swaps, Strong &amp; Kind, label detective, and Tier Time clues. Play it once together, share your squares, and you're done for today!</p>
+
+            <div class="showup-box" id="showup-box" aria-live="polite">
+              <span class="showup-title">⭐ Show-Up Stars ⭐</span>
+              <div class="showup-trail empty" id="showup-trail">Play today's five to earn your first star!</div>
+              <p class="showup-count" id="showup-count">Days you've played: 0 days</p>
+              <p class="showup-note">You get a star just for <strong>finishing</strong> today's five — any score counts, finishing is the win! Your stars <strong>never disappear</strong>, and missing a day <strong>never breaks anything</strong>. There's no streak to lose — just stars that stay and wait for you.</p>
+              <p class="showup-device" id="showup-device-note">⭐ Stars live on this device and browser, so playing on a different phone starts a fresh trail there.</p>
+            </div>
+
+            <button class="big-btn" id="btn-daily" type="button">Play Today's Five ▶</button>
+            <p class="daily-small">Show-up stars are saved on this device (see above). The Play button below is unlimited, any time — tomorrow brings a fresh five.</p>
+          </div>
+
+          <button class="big-btn orange" id="btn-play" type="button">Play ▶</button>
+          <p class="play-sub">A surprise mix of every game — sorting, swaps, tiers, detective clues, and Strong &amp; Kind questions. Just tap and go!</p>
+          <div>
+            <button class="ghost-btn" id="btn-missions" type="button">🏠 Family Missions</button>
+          </div>
+          <p style="font-weight:700;color:var(--ink-soft);line-height:1.5;max-width:46ch;margin:14px auto 0;">Missions are real-world challenges your whole family does together off the screen — at meals, at the store, and in the kitchen.</p>
+          <div>
+            <button class="text-link-btn" id="btn-all-games" type="button" aria-expanded="false">All Games — pick a specific one ▾</button>
+          </div>
+
+          <div id="all-games-panel" class="hidden">
+          <div class="section-label">Pick a game</div>
+          <div class="mode-row" id="mode-row">
+            <button class="mode-card selected" data-mode="sort">
+              <span class="mode-emoji">🧺</span>
+              <span class="mode-name">Sort It!</span>
+              <span class="mode-desc">A food pops up. Is it an everyday food or a sometimes food? Sort all 10!</span>
+            </button>
+            <button class="mode-card" data-mode="swap">
+              <span class="mode-emoji">🔀</span>
+              <span class="mode-name">Swap It!</span>
+              <span class="mode-desc">Real-life moments, two choices. Pick the stronger swap every time!</span>
+            </button>
+            <button class="mode-card" data-mode="confidence">
+              <span class="mode-emoji">💛</span>
+              <span class="mode-name">Strong &amp; Kind</span>
+              <span class="mode-desc">Quick coach-style questions about what bodies can DO, and how we talk about ourselves and friends.</span>
+            </button>
+            <button class="mode-card" data-mode="label">
+              <span class="mode-emoji">🔎</span>
+              <span class="mode-name">Label Detective</span>
+              <span class="mode-desc">Tricky detective questions: read simple food labels, find the sugar, spot the first ingredient, and make the call.</span>
+            </button>
+            <button class="mode-card" data-mode="tier">
+              <span class="mode-emoji">🏆</span>
+              <span class="mode-name">Tier Time</span>
+              <span class="mode-desc">For master rankers: guess which rung a food lives on — Power Fuel, Everyday, Middle, or Sometimes. Close guesses get a kind “Close!” and the why.</span>
+            </button>
+          </div>
+
+          <div class="tier-ladder-intro">
+            <span class="t-title">🪜 Tier Time: health is a ladder, not a pass/fail test</span>
+            <p>There are no letter grades and nobody fails. Foods live on different rungs, how they're made can move them a rung, and favourite foods live on <strong>every</strong> rung — yes, even the top rung and the Sometimes rung. Your job is just to learn where each one lives, and why.</p>
+            <div class="ladder" aria-label="The tier ladder">
+              <div class="ladder-rung rung-power">💪 Power Fuel — top rung<small>Protein, fiber, vitamins, water — foods that do the most for you</small></div>
+              <div class="ladder-rung rung-everyday">⚡ Everyday<small>Energy staples you can eat every day, best with protein &amp; veggies beside them</small></div>
+              <div class="ladder-rung rung-middle">🔀 Middle<small>In between — how it's made or what comes with it moves it a rung</small></div>
+              <div class="ladder-rung rung-sometimes">🎉 Sometimes rung<small>Treats for once in a while — still favourites, just not everyday fuel</small></div>
+            </div>
+          </div>
+
+          <button class="big-btn" id="btn-start">Start Playing ▶</button>
+          </div>
+        </div>
+        <p class="grownups-note">A quick note for grown-ups: some everyday foods in this game include peanut, milk, and egg — please check what works for your kids. The nutrition notes here are general learning for families, not medical advice.</p>
+      </section>
+
+      <!-- ============ GAME SCREEN ============ -->
+      <section id="screen-game" class="hidden">
+        <div class="round-label" id="round-label">Question 1 of 10</div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+
+        <div class="stage">
+          <div id="repeat-badge" class="repeat-badge hidden">↻ This one's back for another try — you've got this!</div>
+          <p class="prompt" id="prompt"></p>
+
+          <!-- sort layout -->
+          <div id="sort-layout">
+            <div class="food-stage">
+              <span class="food-emoji" id="food-emoji">🍎</span>
+              <div class="food-name" id="food-name">Apple</div>
+            </div>
+            <div class="answer-row">
+              <button class="answer-btn everyday" id="btn-everyday">💪 Everyday Food<small>Power food — eat lots!</small></button>
+              <button class="answer-btn sometimes" id="btn-sometimes">🎉 Sometimes Food<small>Treat food — once in a while</small></button>
+            </div>
+          </div>
+
+          <!-- swap layout -->
+          <div id="swap-layout" class="hidden">
+            <div class="swap-row" id="swap-row"></div>
+          </div>
+
+          <!-- tier time layout -->
+          <div id="tier-layout" class="hidden">
+            <div class="food-stage">
+              <span class="food-emoji" id="tier-emoji">🍎</span>
+              <div class="food-name" id="tier-name">Apple</div>
+            </div>
+            <p style="font-weight:800;color:var(--ink-soft);line-height:1.5;margin:4px auto 0;max-width:44ch;">Which rung does it live on? Remember: favourite foods live on every rung, and close counts as learning!</p>
+            <div class="tier-buttons" id="tier-buttons"></div>
+          </div>
+
+          <!-- label detective layout -->
+          <div id="label-layout" class="hidden">
+            <div class="label-card">
+              <div class="label-product"><span id="label-emoji">🥣</span> <span id="label-product">Food</span></div>
+              <div class="label-title">Nutrition Facts</div>
+              <div class="label-row"><span>Serving size</span><strong id="label-serving">1 serving</strong></div>
+              <div class="label-row"><span>Sugar</span><strong id="label-sugar">0g</strong></div>
+              <div class="label-row"><span>Protein</span><strong id="label-protein">0g</strong></div>
+              <div class="label-row"><span>Fiber</span><strong id="label-fiber">0g</strong></div>
+              <div class="label-ingredients"><span>Ingredients — first one is the biggest ingredient:</span><p id="label-ingredients"></p></div>
+              <div class="label-note">Fictional label made for detective practice</div>
+            </div>
+            <div class="swap-row" id="label-choices"></div>
+          </div>
+
+          <div class="feedback" id="feedback">
+            <span class="fb-title" id="fb-title"></span>
+            <div class="fb-block">
+              <span class="fb-label" id="fb-why-label">🔍 Why — what's inside?</span>
+              <p id="fb-why"></p>
+            </div>
+            <div class="fb-block">
+              <span class="fb-label" id="fb-benefit-label">💪 What it does for you</span>
+              <p id="fb-benefit"></p>
+            </div>
+            <button class="fb-more-btn hidden" id="fb-more-btn" type="button">Tap to learn more ▾</button>
+            <p class="fb-extra hidden" id="fb-extra"></p>
+          </div>
+          <div class="next-row">
+            <button class="big-btn orange hidden" id="btn-next">Next ➜</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ RESULTS SCREEN ============ -->
+      <section id="screen-results" class="hidden">
+        <div class="stage results">
+          <div class="big-stars" id="big-stars"><span>★</span><span>★</span><span>★</span></div>
+          <h2 id="result-title">Great job!</h2>
+          <div class="score-line" id="score-line">You got 8 out of 10!</div>
+          <div id="daily-result" class="hidden">
+            <div class="wordle-row" id="wordle-squares" aria-label="Daily Fuel Five result squares"></div>
+            <p id="daily-share-text" style="font-weight:900;color:var(--ink);"></p>
+            <button class="copy-btn" id="btn-copy-result" type="button">📋 Copy my result</button>
+            <p id="copy-confirm" class="hidden" style="color:var(--green-dark);font-weight:900;margin-top:8px;">Copied! Share it with family.</p>
+            <div id="showup-result" class="showup-result hidden">
+              <span class="sr-title" id="showup-result-title">⭐ You earned a Show-Up Star!</span>
+              <div class="sr-trail" id="showup-result-trail">⭐</div>
+              <p id="showup-result-count" style="font-weight:900;color:var(--ink);"></p>
+              <p id="showup-result-note">You got this star just for finishing — any score counts! Your stars never disappear, and missing a day never breaks anything.</p>
+            </div>
+            <p style="margin-top:10px;">That's today's five done. Tomorrow brings a fresh five — practice modes stay open any time.</p>
+          </div>
+          <p id="result-message"></p>
+          <div class="result-btns">
+            <button class="big-btn" id="btn-again">Play Again 🔁</button>
+            <button class="ghost-btn" id="btn-home">Change Game</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MISSIONS SCREEN ============ -->
+      <section id="screen-missions" class="hidden">
+        <div class="stage" style="text-align:left;">
+          <h2 style="text-align:center;font-size:clamp(1.8rem,6.5vw,2.5rem);margin:6px 0;">🏠 Family Missions</h2>
+          <p style="text-align:center;font-weight:700;color:var(--ink-soft);line-height:1.55;max-width:48ch;margin:0 auto;">Real-world missions the whole family does together — off the screen, at the table, at the store, and in the kitchen. Pick one, try it together, and cheer each other on.</p>
+          <div class="mission-featured" id="mission-featured"></div>
+          <div class="section-label" style="text-align:left;">All missions — browse &amp; pick a favourite</div>
+          <div class="missions-grid" id="missions-grid"></div>
+          <div style="text-align:center;">
+            <button class="ghost-btn" id="btn-missions-back" type="button">← Back to games</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <script>
+      // ---------------- Data ----------------
+      // kind: "everyday" = power food, "sometimes" = treat food
+      var SORT_FOODS = [
+        { name: "Apple", emoji: "🍎", kind: "everyday", why: "It's full of fiber, water, and vitamins, with natural sweetness — not a pile of added sugar.", benefit: "Fiber helps your digestion and helps you feel full, so an apple is a snack with real staying power.", extra: "And unlike sticky candy, an apple has no added sugar — much kinder to your teeth!" },
+        { name: "Broccoli", emoji: "🥦", kind: "everyday", why: "It's loaded with vitamins and fiber and very little sugar or fat, so it's pure fuel.", benefit: "It gives your body vitamins and minerals it uses to grow and stay healthy.", extra: "Broccoli is actually a tiny flower you eat before it blooms!" },
+        { name: "Candy", emoji: "🍬", kind: "sometimes", why: "It's almost all added sugar with almost no protein, fiber, or vitamins to slow it down.", benefit: "It tastes super sweet, but it's almost all sugar, so it doesn't give your body much to build with — and lots of sugar is rough on your teeth.", extra: "That's why candy is fun for a treat moment, not for fueling soccer." },
+        { name: "Carrots", emoji: "🥕", kind: "everyday", why: "They're crunchy and full of water, fiber, and beta-carotene, which your body turns into vitamin A.", benefit: "That vitamin A helps keep your eyes healthy as you grow.", extra: "Carrots are sweet and crunchy, and they bring fiber along too!" },
+        { name: "Soda", emoji: "🥤", kind: "sometimes", why: "One 12-ounce can of regular soda can hide about 10 spoonfuls of added sugar and has no fiber or protein.", benefit: "It tastes sweet and bubbly, but all that added sugar is rough on your teeth, and it gives your body nothing to build with — water hydrates you with no sugar at all.", extra: "If you love fizz, sparkling water gives bubbles without all that sugar!" },
+        { name: "Banana", emoji: "🍌", kind: "everyday", why: "It's full of potassium, fiber, and natural energy — no added sugar or frying needed.", benefit: "Potassium is a mineral your muscles use when you run, jump, and play — that's why players love them.", extra: "A banana comes in its own wrapper — nature's perfect snack pack!" },
+        { name: "Donut", emoji: "🍩", kind: "sometimes", why: "It's fried dough plus sugar and glaze, so it brings lots of added sugar and fried fat, and very little fiber or protein.", benefit: "It's fun and tasty as a treat, but all that added sugar is tough on your teeth, and there isn't much in it for your body to build with.", extra: "Best donut move: enjoy one as the treat AFTER an eggs-and-fruit breakfast — not as the whole breakfast by itself!" },
+        { name: "Eggs", emoji: "🥚", kind: "everyday", why: "They're packed with protein and healthy bits your body uses as building blocks.", benefit: "Protein helps your body build and repair muscles as you grow.", extra: "One little egg packs protein plus lots of vitamins and minerals in one tiny shell!" },
+        { name: "French Fries", emoji: "🍟", kind: "sometimes", why: "They start as potatoes, but frying soaks them in oil and adds lots of salt, so you get way more fat and salt than the potato started with.", benefit: "They're crispy and fun to share, but all that added fat and salt is what makes them a sometimes food instead of an everyday one.", extra: "Baked potato wedges at home give you potato power with way less oil!" },
+        { name: "Strawberries", emoji: "🍓", kind: "everyday", why: "They're sweet from nature, full of water, fiber, and vitamin C — not added sugar.", benefit: "They give you vitamin C, a nutrient your body uses to stay healthy, plus fiber for your tummy.", extra: "A handful of strawberries has lots of vitamin C — candy has basically none!" },
+        { name: "Water", emoji: "💧", kind: "everyday", why: "It's exactly what your body needs — no sugar, no salt, just pure hydration.", benefit: "Your body is mostly water, and drinking enough of it helps you feel your best when you play, learn, and run around.", extra: "Your body is more than half water, so it loves getting more!" },
+        { name: "Ice Cream", emoji: "🍦", kind: "sometimes", why: "It has lots of added sugar and creamy fat, and not much fiber or protein.", benefit: "It's a joyful celebration food, but it doesn't give your body much protein, fiber, or vitamins to build with.", extra: "Saving it for sometimes makes it taste even more special!" },
+        { name: "Chicken", emoji: "🍗", kind: "everyday", why: "It's full of lean protein with not a lot of extra fat or sugar added.", benefit: "That protein is like building blocks — your body uses it to build and repair muscles while you grow.", extra: "It's a favorite of athletes for a reason: lots of protein in every bite!" },
+        { name: "Cookies", emoji: "🍪", kind: "sometimes", why: "They're baked with lots of sugar and butter, and very little fiber to fill you up.", benefit: "They're cozy and delicious for a treat, but with very little fiber or protein, they're a fun extra rather than real fuel.", extra: "One or two, eaten slowly and really tasted, is the best way to enjoy cookies!" },
+        { name: "Yogurt", emoji: "🥛", kind: "everyday", why: "It has protein, calcium, and friendly bacteria, especially plain or lightly sweetened yogurt.", benefit: "Calcium helps build strong bones and teeth, and yogurt's protein helps your body grow and repair.", extra: "Add berries on top for fiber and natural sweetness!" },
+        { name: "Potato Chips", emoji: "🥔", kind: "sometimes", why: "They're thin potatoes fried in oil with lots of salt, so even a small handful packs a lot of fat and salt.", benefit: "They give a super crunchy treat, but they're light on fiber and protein, so a handful is more of a fun extra than a filling snack.", extra: "Crunchy carrots and cucumber give you that crunch with water and vitamins!" },
+        { name: "Grapes", emoji: "🍇", kind: "everyday", why: "They're nature's bite-size snacks — mostly water, fiber, and natural sweetness, no added sugar.", benefit: "They help you stay hydrated and give you natural energy from the fruit itself.", extra: "Frozen grapes taste like tiny popsicles on a hot day!" },
+        { name: "Birthday Cake", emoji: "🎂", kind: "sometimes", why: "It's layers of sugar, white flour, and frosting — made for parties, not for everyday fuel.", benefit: "It makes birthdays feel special and tastes amazing, but it's mostly sugar, so it doesn't give your body much to build with.", extra: "If we ate cake every day, it wouldn't feel like a celebration anymore!" },
+        { name: "Cheese", emoji: "🧀", kind: "everyday", why: "It's packed with calcium and protein in a small bite, with no added sugar.", benefit: "It helps build strong bones and teeth while you're still growing, and keeps you full longer.", extra: "Cheese and apple together? Crunchy, creamy, and super filling!" },
+        { name: "Gummy Bears", emoji: "🧸", kind: "sometimes", why: "They're chewy sugar that sticks to your teeth, with almost no fiber, protein, or vitamins.", benefit: "They're fun and fruity as a treat, but sticky sugar is rough on teeth, so gummies are best saved for sometimes.", extra: "Brushing after gummies gives your teeth a big thank-you!" },
+        { name: "Cucumber", emoji: "🥒", kind: "everyday", why: "It's mostly water plus fiber and a little vitamin power — super light and fresh.", benefit: "It cools you down, helps hydrate you, and gives you a big, fresh crunch before dinner.", extra: "Cucumbers are 95% water — like drinking and snacking at once!" },
+        { name: "Orange", emoji: "🍊", kind: "everyday", why: "It's juicy and full of water, fiber, and vitamin C, with sweetness from the fruit itself.", benefit: "It gives you vitamin C, a nutrient your body uses to stay healthy, plus fiber that helps your digestion.", extra: "Eating the whole orange gives you fiber that juice leaves behind!" },
+        { name: "Chocolate Bar", emoji: "🍫", kind: "sometimes", why: "Most of it is added sugar and fat, with only a little of the good stuff from cocoa.", benefit: "It tastes rich and sweet, but it's mostly a treat — there isn't much fiber, protein, or vitamins inside.", extra: "A small piece after a fuel-filled meal is a tasty way to enjoy it!" },
+        { name: "Oatmeal", emoji: "🥣", kind: "everyday", why: "It's a whole grain full of fiber that digests slowly — not a sugar rush.", benefit: "Its fiber digests slowly, so oatmeal tends to keep you feeling full longer than a sugary breakfast.", extra: "Oats are a whole grain, and whole grains make great everyday fuel!" },
+        { name: "Sweet Potato", emoji: "🍠", kind: "everyday", why: "It's naturally sweet but also full of fiber, water, and orange-powered vitamins.", benefit: "Its fiber helps you feel full, and its bright orange color means it's full of beta-carotene, which your body turns into eye-helping vitamin A.", extra: "That bright orange color is the sign of its super vitamin!" },
+        { name: "Marshmallows", emoji: "☁️", kind: "sometimes", why: "They're basically fluffy sugar and air, with no protein, fiber, or vitamins.", benefit: "They're perfect toasted on a campfire night, but they're mostly sugar, so they don't give your body much fuel or anything to build with.", extra: "One s'more on a special night is magic. A whole bag for snack isn't fuel." },
+        { name: "Blueberries", emoji: "🫐", kind: "everyday", why: "Tiny but mighty — full of fiber, water, and vitamins, with no added sugar.", benefit: "They pack a lot of good stuff into something tiny: fiber and vitamins your body uses every day.", extra: "Blueberries are one of the oldest foods in North America!" },
+        { name: "Milk", emoji: "🥛", kind: "everyday", why: "It has calcium, protein, and vitamin D together — a team built for growing bodies.", benefit: "It helps build strong bones and teeth now, while you're growing your future tall, strong self.", extra: "Your bones are growing fastest right now, so they love this team!" },
+        { name: "Pasta", emoji: "🍝", kind: "everyday", why: "Pasta is an energy food — mostly carbohydrates that your body turns into fuel. Plain white pasta doesn't have much fiber on its own.", benefit: "It gives you energy to play and learn, and it becomes a power plate when you pair it with protein like chicken or meatballs and veggies like peas or carrots.", extra: "Pasta night power move: add chicken and a handful of peas right into the bowl!" },
+        { name: "Rice", emoji: "🍚", kind: "everyday", why: "Rice is another energy staple, like pasta. It gives fuel, but on its own it doesn't bring much fiber or protein.", benefit: "It helps fill your tank for games and school, especially next to protein foods like chicken, eggs, beans, or fish and some veggies on the side.", extra: "Brown rice has more fiber than white rice because it keeps more of the grain!" },
+        { name: "Naan Bread", emoji: "🫓", kind: "everyday", why: "Naan is an energy staple, like rice and pasta. It's made from refined flour, so on its own it doesn't bring much fiber or protein.", benefit: "It gives you fuel for playing and learning, and it becomes a power food when you use it to scoop up protein and veggies — chicken, lentils, chickpeas, or a yogurt dip like raita.", extra: "Garlic-butter naan is the heavier, richer version — plain naan is the everyday pick!" },
+        { name: "Air-Popped Popcorn", emoji: "🍿", kind: "everyday", why: "Popcorn starts as a whole grain! Air-popped with just a little salt, it's mostly fiber and crunch — not fried oil.", benefit: "Its fiber helps you feel full, and you get a big, fun bowl of snack from a small pile of kernels.", extra: "Popcorn depends on how it's made — air-popped is everyday, extra-buttery movie popcorn is a sometimes treat!" },
+        { name: "Movie Popcorn", emoji: "🍿", kind: "sometimes", why: "Movie popcorn is usually popped in lots of oil and covered in butter and salt, so the same whole grain ends up with way more fat and salt.", benefit: "It's a perfect movie treat to share and enjoy — it just isn't the everyday version of popcorn.", extra: "Same food, different team: how it's cooked can change where it lands!" },
+        { name: "Mac and Cheese", emoji: "🧀", kind: "sometimes", why: "It's pasta in a creamy cheese sauce, so you get lots of rich fat and salt, and not much fiber or veggies to go with it.", benefit: "It's cozy and yummy for sometimes, but it doesn't build much — it has way less fiber and protein power than a full power plate.", extra: "Want to level it up at home? Stir in peas or broccoli and have fruit on the side!" },
+        { name: "Ramen Noodles", emoji: "🍜", kind: "sometimes", why: "Ramen noodles are usually fried before they dry, and the flavor packet is very, very salty. There's little fiber and not much protein in the bowl.", benefit: "It's warm and slurpy and fun sometimes, but all that salt and so little fiber or protein means it doesn't keep you full or fueled for long.", extra: "At home you can boost ramen: crack in an egg and add frozen peas or carrots!" },
+        { name: "Chicken Nuggets", emoji: "🍗", kind: "sometimes", why: "Nuggets are chicken, but they're usually covered in coating and fried, which adds lots of oil and salt around the protein.", benefit: "You do get some protein, but the frying is why nuggets land in sometimes. Grilled or baked chicken gives you the protein without all the fried coating.", extra: "Everyday swap: grilled chicken strips — same chicken power, no fried jacket!" },
+        { name: "Homemade Hamburger", emoji: "🍔", kind: "everyday", why: "A burger you make at home is mostly a protein food — ground beef or turkey in a bun. What goes with it decides a lot.", benefit: "Its protein helps build and repair muscles, and with lettuce, tomato, or carrot sticks on the side it can sit right on a power plate.", extra: "Add a fruit or veggie side and your burger plate gets even stronger!" },
+        { name: "Fast-Food Burger and Fries", emoji: "🍔", kind: "sometimes", why: "Fast-food style usually means a bigger, saltier burger plus fries fried in oil and sugary drinks — a lot of salt, fried fat, and added sugar in one meal.", benefit: "It's a fun sometimes meal out, but as a whole meal it brings much more salt, fried fat, and sugar than a homemade burger plate.", extra: "Notice the difference? It's not just the burger — it's everything that comes with it!" },
+        { name: "Sour Patch Kids", emoji: "🍬", kind: "sometimes", why: "These sour candies are sugar plus sour acid, with no fiber, protein, or vitamins. That combo of sugar and acid is extra tough on teeth.", benefit: "They're super sour and fun as a treat, but sugar plus acid sitting on your teeth is a rough team for your smile.", extra: "If you have sour candy, water after helps rinse your mouth — and brushing later helps too!" },
+        { name: "Brownies", emoji: "🍫", kind: "sometimes", why: "Brownies are baked with lots of sugar and butter or oil, and very little fiber. Chocolate flavor, treat nutrition.", benefit: "They're fudgy and delicious for dessert or a party, but they don't give your body much to build with — mostly sugar for a quick taste of energy.", extra: "A brownie after a power-plate dinner is a great way to enjoy it!" },
+        { name: "Pancakes", emoji: "🥞", kind: "sometimes", why: "Pancakes are mostly white flour batter, and the syrup and butter on top add sugar and fat. There isn't much fiber or protein in the stack.", benefit: "They're a cozy weekend favourite, but they don't keep you full for long — pairing them with eggs or fruit makes breakfast stronger.", extra: "Whole-grain pancakes with berries on top are the levelled-up version!" },
+        { name: "Waffles", emoji: "🧇", kind: "sometimes", why: "Waffles are batter cooked in a waffle iron — mostly refined flour, and those little squares love to fill up with syrup and butter.", benefit: "Fun and crispy for a treat breakfast, but light on fiber and protein, so they work best next to eggs or fruit.", extra: "Try berries and yogurt on top instead of a syrup flood!" },
+        { name: "Frosted Cereal", emoji: "🥣", kind: "sometimes", why: "The flakes are coated in sugar — in many frosted cereals, sugar is one of the very first ingredients, and there's barely any fiber.", benefit: "It tastes sweet and crunchy, but it's mostly a sugar food, so it doesn't give your body much to build with.", extra: "Detective move: flip the box and check where sugar sits in the ingredients!" },
+        { name: "Whole-Grain Cereal", emoji: "🥣", kind: "everyday", why: "It's made from whole grains like oats or wheat with much less added sugar, so it brings fiber along for breakfast.", benefit: "Its fiber helps you feel full, and with milk it adds protein and calcium too — a solid school-morning team.", extra: "Look for 'whole grain' as the first ingredient on the box!" },
+        { name: "Toast and Jam", emoji: "🍞", kind: "sometimes", why: "White toast is refined flour with little fiber, and jam is mostly sugar — sweet and quick, but not much building power.", benefit: "It's a tasty start, but it won't keep you full for long. Whole-grain toast with peanut butter or an egg makes it stronger.", extra: "Swap jam for sliced strawberries — sweetness plus fiber!" },
+        { name: "Bacon", emoji: "🥓", kind: "sometimes", why: "Bacon is a processed meat that's very salty and fatty. A little bit goes a long way.", benefit: "It's crispy and full of flavour for a special breakfast, but all that salt and fat is why it's a sometimes food.", extra: "One or two pieces as a flavour sidekick beats a whole plate of it!" },
+        { name: "Sausage Links", emoji: "🍖", kind: "sometimes", why: "Breakfast sausages are processed meat with lots of salt and fat mixed in — much more than plain meat like chicken.", benefit: "They're savoury and filling for a treat breakfast, but the salt and processing are why they visit sometimes, not every day.", extra: "Eggs give you breakfast protein without all that extra salt!" },
+        { name: "Orange Juice", emoji: "🧃", kind: "sometimes", why: "Juice squeezes the sugar out of several oranges but leaves most of the fiber behind. It does have vitamin C, but a glass can hold a lot of sugar.", benefit: "Eating the whole orange is the stronger everyday move — you get the vitamin C AND the fiber the juice left behind.", extra: "Pour a small glass, and let water be your main thirst drink!" },
+        { name: "Yogurt Tube", emoji: "🥛", kind: "sometimes", why: "Tubes are handy yogurt, but many flavours add sugar — some have as much sugar as a small treat in one tiny tube.", benefit: "You still get some protein and calcium from the yogurt, which is why it sits in the middle — check the sugar like a detective!", extra: "Plain yogurt in a cup with berries is the everyday version!" },
+        { name: "PB&J Sandwich", emoji: "🥪", kind: "everyday", why: "Peanut butter brings protein and healthy fats, but jam adds sugar and white bread has little fiber — a real mix of strong and sweet.", benefit: "The peanut butter helps you feel full and gives you building power, which is why this lunchbox classic lands in the middle, not with the treats.", extra: "Level it up: whole-grain bread and sliced banana instead of some of the jam!" },
+        { name: "String Cheese", emoji: "🧀", kind: "everyday", why: "It's real cheese in a fun peel-apart stick — calcium and protein with no added sugar.", benefit: "It helps build strong bones and teeth and keeps you full between meals, in a lunchbox-friendly size.", extra: "Peeling it into strings makes the snack last longer — snack trick and brain trick!" },
+        { name: "Crackers", emoji: "🍘", kind: "sometimes", why: "Most crackers are refined flour, oil, and salt with very little fiber — crunchy, but there isn't much in them to build with.", benefit: "They're a fine crunchy sidekick sometimes, especially with cheese or hummus doing the protein work beside them.", extra: "Whole-grain crackers bring fiber — check the box like a detective!" },
+        { name: "Granola Bar", emoji: "🌾", kind: "sometimes", why: "Granola bars sound like a health food, but many are held together with syrups and sugars — some have as much sugar as a candy bar.", benefit: "The oats and nuts inside do bring fiber and a little protein, which is why it sits in the middle — the label tells the real story.", extra: "Pick bars where oats or nuts come first and sugar is small!" },
+        { name: "Fruit Snacks", emoji: "🍬", kind: "sometimes", why: "Despite the fruit pictures on the pouch, most fruit snacks are sugar and juice concentrate shaped into gummies — sticky on teeth, with almost no fiber.", benefit: "They're a fun chewy treat, but real fruit gives you the same sweetness plus the fiber and water fruit snacks leave out.", extra: "A fruit snack is candy wearing a fruit costume!" },
+        { name: "Pretzels", emoji: "🥨", kind: "sometimes", why: "Pretzels are baked dough with salt on top — low in fat, but also low in fiber and protein, so they don't fill you up much.", benefit: "They're a crunchy sometimes snack; pairing them with hummus or cheese adds the protein and staying power they're missing.", extra: "That salty crunch is fun — just add a protein partner!" },
+        { name: "Trail Mix", emoji: "🥜", kind: "everyday", why: "It's a mix of strong stuff — nuts and seeds with protein and healthy fats, raisins with fiber — though some mixes sneak in candy pieces.", benefit: "The nuts and seeds give real staying power for hikes and car rides, which is why trail mix beats plain candy for adventures.", extra: "Pick mixes where the nuts and raisins beat the candy pieces!" },
+        { name: "Pizza", emoji: "🍕", kind: "sometimes", why: "Pizza is bread crust, cheese, and sauce — the cheese brings protein and calcium, but the crust is refined and toppings like pepperoni add salt and fat.", benefit: "It's a party favourite that does bring some real food power, and how it's made decides a lot: veggie-topped and homemade versions are stronger.", extra: "Add peppers, mushrooms, or sweetcorn on top and your slice gains a veggie team!" },
+        { name: "Tacos", emoji: "🌮", kind: "everyday", why: "A taco is a team meal: a corn or flour shell, protein like beans or beef, and veggies like lettuce and tomato, all in one hand.", benefit: "You get protein for building, fiber from beans and veggies, and energy from the shell — lots of food groups working together.", extra: "Bean tacos are a protein surprise — beans build muscles too!" },
+        { name: "Quesadillas", emoji: "🫔", kind: "sometimes", why: "A quesadilla is mostly cheese melted in a white tortilla — tasty protein and calcium, but very little fiber and often lots of melted fat.", benefit: "It's a cozy sometimes food; adding beans, peppers, or chicken inside brings the fiber and balance it's missing.", extra: "Dip it in salsa for a veggie boost with zero cooking!" },
+        { name: "Grilled Cheese", emoji: "🥪", kind: "sometimes", why: "It's cheese between two slices of usually white bread, toasted in butter — protein and calcium, but little fiber and extra fried fat.", benefit: "Warm, melty, and comforting for sometimes. Whole-grain bread and a tomato slice inside make it a stronger build.", extra: "Tomato soup for dunking adds a veggie to the team!" },
+        { name: "Hot Dogs", emoji: "🌭", kind: "sometimes", why: "Hot dogs are processed meat — ground meat mixed with lots of salt and preservatives, squeezed into a casing. Very salty, and no fiber.", benefit: "They're a ballpark classic and fun at cookouts, but the processing and salt are why they're a sometimes food.", extra: "At a cookout, a hot dog plus fruit and corn on the cob makes a stronger plate!" },
+        { name: "Spaghetti and Meatballs", emoji: "🍝", kind: "everyday", why: "Pasta brings the energy, meatballs bring the protein, and tomato sauce counts as a veggie — all three teams on one plate.", benefit: "That team-up is why this dinner works: energy to play, protein to build, and vitamins from the tomatoes.", extra: "Turkey or bean meatballs work the same protein magic!" },
+        { name: "Salmon", emoji: "🐟", kind: "everyday", why: "Salmon is a fatty fish full of protein and special healthy fats called omega-3s, with almost no sugar and no processing.", benefit: "Those healthy fats are building materials your body uses as you grow, and the protein helps build and repair muscles.", extra: "Salmon's pink colour is natural — it's this fish's super shade!" },
+        { name: "Dumplings", emoji: "🥟", kind: "everyday", why: "Dumplings wrap meat and veggies in a thin dough skin. Steamed ones are light; pan-fried ones soak up extra oil.", benefit: "Inside you get protein and veggies together, which is why steamed dumplings land in the middle-strong zone.", extra: "Steamed beats fried for the everyday version — same dumpling, less oil!" },
+        { name: "Hummus and Pita", emoji: "🥙", kind: "everyday", why: "Hummus is blended chickpeas — a bean! — so it brings fiber and plant protein, and pita brings the energy to scoop it with.", benefit: "Beans are building food: their fiber and protein together keep you full and fueled.", extra: "Scoop with cucumber and pepper strips too for a crunchy veggie win!" },
+        { name: "Burrito", emoji: "🌯", kind: "everyday", why: "A burrito wraps beans, rice, and veggies in a tortilla — beans bring fiber and protein, though cheese and sour cream can add rich fat.", benefit: "The bean-and-rice team is what makes it strong: together they keep you full and fueled for a long time.", extra: "Load the beans and veggies in first — your favourites still fit!" },
+        { name: "Watermelon", emoji: "🍉", kind: "everyday", why: "It's in the name — watermelon is mostly water, plus fiber and vitamins, with natural sweetness and no added sugar.", benefit: "It hydrates you while you snack, which makes it a summer sports-day hero.", extra: "A watermelon is more than 90% water!" },
+        { name: "Peach", emoji: "🍑", kind: "everyday", why: "A fresh peach is fiber, water, and vitamins wrapped in fuzzy skin — sweet from nature, nothing added.", benefit: "Its fiber helps your digestion, and eating the skin gives you even more of it.", extra: "A ripe peach smells sweet before you even bite it!" },
+        { name: "Pear", emoji: "🍐", kind: "everyday", why: "Pears are one of the most fiber-full fruits — one pear has serious fiber power for such a gentle fruit.", benefit: "All that fiber helps your tummy work well and keeps you feeling full after snack time.", extra: "Pear skin is where lots of the fiber lives — no peeling needed!" },
+        { name: "Mango", emoji: "🥭", kind: "everyday", why: "Mango is sweet tropical fruit with fiber and a big helping of vitamin A and vitamin C — nothing added; it's just naturally dessert-sweet.", benefit: "It gives you vitamins your body uses to stay healthy, plus fiber — proof that fruit can taste like a treat all by itself.", extra: "Frozen mango chunks taste like sorbet bites!" },
+        { name: "Kiwi", emoji: "🥝", kind: "everyday", why: "This fuzzy little fruit hides bright green flesh full of vitamin C and fiber — one kiwi has more vitamin C than a small orange.", benefit: "Small but mighty: vitamins for staying healthy and fiber for your digestion, in a two-bite snack.", extra: "You can eat the fuzzy skin too — extra fiber!" },
+        { name: "Pineapple", emoji: "🍍", kind: "everyday", why: "Pineapple is juicy tropical fruit with fiber and vitamin C. Fresh pineapple has no added sugar — pineapple canned in syrup is the sweeter, sometimes version.", benefit: "It brings vitamin C your body uses to stay healthy, plus plenty of water for hydration.", extra: "A pineapple plant takes about two years to grow one fruit!" },
+        { name: "Cherries", emoji: "🍒", kind: "everyday", why: "Cherries are small fruits with fiber, water, and vitamins — sweet and tart from nature, with no added sugar when they're fresh.", benefit: "A handful gives you natural energy plus fiber, in a snack that's easy to share.", extra: "Cherries grow in pairs — nature's earrings!" },
+        { name: "Bell Peppers", emoji: "🫑", kind: "everyday", why: "Peppers are crunchy veggies full of water, fiber, and vitamin C — red ones are the sweetest because they're the most ripe.", benefit: "They give you a big crunch and vitamin C, and they make a perfect scoop for hummus.", extra: "Green, yellow, orange, and red peppers are the same veggie at different ripeness!" },
+        { name: "Edamame", emoji: "🫛", kind: "everyday", why: "Edamame are young soybeans — a rare veggie that's also a protein food, with fiber in every pod.", benefit: "Protein plus fiber in a snack you pop with your fingers — that's rare and powerful for a vegetable.", extra: "Squeeze the pod and the beans pop right out!" },
+        { name: "Corn on the Cob", emoji: "🌽", kind: "everyday", why: "Corn is a starchy vegetable — it brings energy like a grain, plus fiber and a little protein. Butter and salt on top are the add-ons to watch.", benefit: "It gives you fuel and fiber, and eating it off the cob is half the fun of summer dinners.", extra: "Every ear of corn has an even number of rows!" },
+        { name: "Avocado", emoji: "🥑", kind: "everyday", why: "Avocado is a fruit full of soft, healthy fats and fiber — the fats are the kind your body uses for building, not the fried kind.", benefit: "Its healthy fats and fiber together make it super filling, so a little avocado powers a snack for a long time.", extra: "Avocados are berries — one giant seed in the middle proves it!" },
+        { name: "Cherry Tomatoes", emoji: "🍅", kind: "everyday", why: "These tiny tomatoes are water, fiber, and vitamins in pop-in-your-mouth size, with natural sweetness from the sun.", benefit: "They're a garden snack that hydrates you and brings vitamin C, no cooking needed.", extra: "Tomatoes are a fruit to a scientist and a veggie to a cook — both are right!" },
+        { name: "Garden Salad", emoji: "🥗", kind: "everyday", why: "A salad is a team of raw veggies — leaves, cucumber, tomatoes, peppers — full of water, fiber, and different vitamins in every colour.", benefit: "Eating lots of colours means lots of different vitamins, and the fiber helps your digestion too.", extra: "Detective challenge: count how many colours are in your salad!" },
+        { name: "Raisins", emoji: "🍇", kind: "everyday", why: "Raisins are dried grapes — the fiber and iron stay, but the sugar gets concentrated and sticky, which is tougher on teeth.", benefit: "They give natural energy and fiber for hikes and lunchboxes, which is why they're in the middle, not with the candy.", extra: "It takes a big pile of grapes to make a small box of raisins!" },
+        { name: "Lollipop", emoji: "🍭", kind: "sometimes", why: "A lollipop is flavoured sugar on a stick — and because it melts slowly, the sugar sits on your teeth for a long, long time.", benefit: "It's a fun, long-lasting treat, but that long sugar bath is exactly why it's in the sometimes group.", extra: "A quick drink of water after a lollipop helps rinse your teeth!" },
+        { name: "Ice Pop", emoji: "🍧", kind: "sometimes", why: "Most ice pops are frozen sugar water with colour and flavour — refreshing, but there's almost nothing in them for your body to build with.", benefit: "On a hot day they're a cool sometimes treat. The level-up: freeze a real fruit smoothie for the same icy fun with fruit inside.", extra: "Frozen grapes and watermelon chunks are nature's ice pops!" },
+        { name: "Cupcake", emoji: "🧁", kind: "sometimes", why: "A cupcake is a mini cake — sugar, white flour, and butter, plus a swirl of frosting that's mostly sugar too.", benefit: "Perfect for birthdays and celebrations — and saving them for celebrations is what makes them feel special.", extra: "Cupcakes were once baked in actual cups — that's where the name comes from!" },
+        { name: "Chocolate Milk", emoji: "🥛", kind: "sometimes", why: "It starts as milk — calcium and protein — but the chocolate flavouring adds a good spoonful of sugar to every glass.", benefit: "You still get milk's bone-building team, which keeps it in the middle; the added sugar is why plain milk is the everyday pick.", extra: "Same cow, different call: the sugar is what moved it!" },
+        { name: "Lemonade", emoji: "🍋", kind: "sometimes", why: "Lemonade is lemon flavour in sugar water — a glass can hide as much sugar as a soda, even though it tastes fresh and fruity.", benefit: "It's a sunny-day treat, but for everyday thirst water wins — lemon slices in water give the flavour without the sugar pile.", extra: "Real lemons are sour — the sugar is what makes lemonade sweet!" },
+        { name: "Sports Drink", emoji: "🥤", kind: "sometimes", why: "Sports drinks are sugar water with a pinch of salts, designed for athletes sweating hard for a very long time — not for everyday thirst.", benefit: "For normal play and practice, water replaces what you sweat out. The sugar in a sports drink is extra your body didn't ask for.", extra: "Pro athletes do drink them — during games that last for hours!" },
+        { name: "Sparkling Water", emoji: "🫧", kind: "everyday", why: "It's water with bubbles — the fizz is just gas, like the air you breathe out. No sugar, no salt, nothing added for your body to deal with.", benefit: "You get the fun of a fizzy drink and the full hydration of water, and there is no sugar sitting on your teeth.", extra: "Add a squeeze of orange or a few berries to make 'fancy water'!" },
+        { name: "Fruit Smoothie", emoji: "🥤", kind: "everyday", why: "A homemade smoothie blends whole fruit, so unlike juice it keeps the fiber — add yogurt or milk and it gains protein too.", benefit: "Fiber plus protein in one glass makes it a snack with staying power. Smoothies with added sugar syrups slide toward sometimes.", extra: "Spinach hides in smoothies — you taste the fruit, your body gets both!" },
+        { name: "Applesauce", emoji: "🍏", kind: "everyday", why: "Unsweetened applesauce is just cooked, mashed apples — the fiber and vitamins stay in. The sweetened kind adds sugar, so the label matters.", benefit: "It's an easy everyday fruit serving, and it doubles as a snack, a dip, and a lunchbox favourite.", extra: "Detectives check for one word on the jar: 'unsweetened'!" },
+        { name: "Peanut Butter", emoji: "🥜", kind: "everyday", why: "Ground peanuts bring protein, fiber, and healthy fats in every spoonful — a little bit packs a lot of building power.", benefit: "That protein-and-fat team makes peanut butter super filling, which is why a small amount powers a whole snack.", extra: "Peanuts aren't tree nuts — they're legumes, cousins of beans!" },
+        { name: "Mixed Nuts", emoji: "🌰", kind: "everyday", why: "Nuts and seeds are tiny packages of protein, fiber, and healthy fats — trees and plants pack them full of building power.", benefit: "A small handful keeps you full for a long time, because protein, fiber, and healthy fats work as a team.", extra: "A walnut looks like a tiny brain — and it's full of healthy fats!" },
+        { name: "Fruit Cup", emoji: "🍑", kind: "everyday", why: "It's real fruit, which is great — but it swims in juice or syrup, and syrup adds sugar that fresh fruit doesn't have.", benefit: "You still get fruit vitamins and some fiber, which is why it sits in the middle; cups packed in juice beat cups packed in syrup.", extra: "Drain the syrup and your fruit cup levels up!" },
+        { name: "Pickles", emoji: "🥒", kind: "everyday", why: "Pickles are cucumbers soaked in salty vinegar water — they keep the crunch and the water, but soak up a lot of salt along the way.", benefit: "They're a crunchy snack with big flavour; the salt is what keeps them in the middle instead of up top.", extra: "A pickle is a cucumber that went swimming in vinegar!" },
+        { name: "Olives", emoji: "🫒", kind: "everyday", why: "Olives are little fruits full of healthy fats — the same kind that make olive oil famous — though they can be salty too.", benefit: "Their healthy fats are building materials your body uses, and a few olives add big flavour to pasta, pizza, and salads.", extra: "Olive trees can live for hundreds of years!" },
+        { name: "Bagel", emoji: "🥯", kind: "everyday", why: "A bagel is a big, chewy bread ring — mostly energy from grains, with a little protein. It's like an extra-large slice of toast.", benefit: "It fills your tank for busy mornings; whole-grain bagels add fiber, and an egg or cream cheese on top adds staying power.", extra: "A bagel is boiled before it's baked — that's what makes it chewy!" },
+        { name: "Croissant", emoji: "🥐", kind: "sometimes", why: "Croissants are made by folding butter into dough again and again — flaky and delicious, but rich in fat and light on fiber.", benefit: "A bakery treat worth savouring sometimes. For everyday breakfasts, toast or a bagel gives energy without all the butter layers.", extra: "A croissant can have more than 50 layers of dough and butter!" },
+        { name: "Blueberry Muffin", emoji: "🧁", kind: "sometimes", why: "Muffins are really small cakes — sugar and oil in the batter — though the real blueberries inside do bring a little fiber and vitamins.", benefit: "The berries help, which is why it's in the middle and not with the frosted treats; it's still more cake than breakfast fuel.", extra: "Bakery muffins can be as big as two home muffins — size matters!" },
+        { name: "Honey", emoji: "🍯", kind: "sometimes", why: "Bees make honey from flower nectar, but to your body it's a sugar — sweet and sticky, with only tiny traces of anything else.", benefit: "A little honey makes tea or toast taste special, but it's a sometimes sweetener, not a health food — your body treats it like sugar.", extra: "Honey never spoils — pots of it found in ancient tombs were still good to eat!" },
+        { name: "Turkey Slices", emoji: "🦃", kind: "everyday", why: "Deli turkey is real protein, but it's processed with salt to stay fresh in the package — more salt than chicken you cook at home.", benefit: "It makes sandwiches quick and brings protein for building, which keeps it in the middle; home-cooked chicken is the top-rung version.", extra: "Check the label: some turkey slices hide a lot of salt!" },
+        { name: "Shrimp", emoji: "🍤", kind: "everyday", why: "Shrimp are small sea animals that are almost all lean protein with very little fat — simple, clean fuel from the sea.", benefit: "Their protein helps build and repair muscles, and they cook in minutes, which makes them a fast power food.", extra: "Shrimp can swim backwards — fast!" },
+        { name: "Fish Sticks", emoji: "🐟", kind: "sometimes", why: "Inside is real fish with protein, but the crunchy coating is breadcrumbs fried in oil with salt — the jacket is what pulls it down a rung.", benefit: "You do get fish protein, which is why it's in the middle; plain baked fish is the everyday version.", extra: "Bake fish at home with a lighter coating for a level-up!" },
+        { name: "Beans", emoji: "🫘", kind: "everyday", why: "Beans are plant powerhouses: fiber, protein, and iron all in one little package, with no added sugar and no frying.", benefit: "Few foods bring fiber AND protein together like beans — they keep you full and help your body build at the same time.", extra: "Beans, rice, and corn growing together were called 'the three sisters' by farmers long ago!" },
+        { name: "Cantaloupe", emoji: "🍈", kind: "everyday", why: "This orange melon is water, fiber, and a big dose of vitamin A — sweet and hydrating, with nothing added.", benefit: "Its orange colour is the beta-carotene sign — the same eye-helping power found in carrots and sweet potatoes.", extra: "Every cantaloupe's netted skin pattern is different!" },
+        { name: "Veggie Burger", emoji: "🍔", kind: "everyday", why: "Veggie burgers are made from beans, grains, and veggies pressed into a patty — fiber and plant protein, though some kinds are quite salty.", benefit: "They bring burger fun with bean power inside; the label decides whether yours is closer to beans or closer to salty.", extra: "Black bean burgers are the easiest to make at home!" },
+        { name: "Chicken Noodle Soup", emoji: "🍲", kind: "everyday", why: "It's a warm team in a bowl: chicken for protein, noodles for energy, and carrots and celery swimming in broth.", benefit: "Protein, energy, veggies, and hydration all in one spoon — and warm soup feels good when you're tired or sniffly.", extra: "The broth is mostly water, so soup hydrates while it feeds you!" },
+        { name: "Hash Browns", emoji: "🥔", kind: "sometimes", why: "They start as potatoes, but shredding and frying them in oil adds lots of fat and salt — the frying is what moves them.", benefit: "Crispy and golden for a treat breakfast; baked potato wedges give you the same potato with way less oil.", extra: "Same potato story as fries: how it's cooked changes the call!" },
+        { name: "Milkshake", emoji: "🥤", kind: "sometimes", why: "A milkshake blends ice cream with milk and syrups — so it's a dessert in a cup, with lots of added sugar and creamy fat.", benefit: "Thick, cold, and joyful for a celebration; a berry smoothie gives you the same frosty fun with whole fruit and fiber.", extra: "Sharing a milkshake with two straws is the classic move!" },
+        { name: "Hot Chocolate", emoji: "☕", kind: "sometimes", why: "It's warm milk plus cocoa plus sugar — the milk brings protein and calcium, but the sugar is what lands it in the middle.", benefit: "Cozy after a snowy day, and stronger than plain candy because of the milk; everyday thirst still belongs to water.", extra: "Real cocoa comes from beans — chocolate grows on trees!" },
+        { name: "Coconut Water", emoji: "🥥", kind: "everyday", why: "It's the clear liquid inside a young coconut — lightly sweet, with potassium and no added sugar.", benefit: "It hydrates and brings minerals, a nice change from water; whole fruit still wins because it brings fiber too.", extra: "Young green coconuts hold the most coconut water!" }
+      ];
+
+      var SWAP_ROUNDS = [
+        {
+          prompt: "You just finished soccer practice and you're SO thirsty. What do you grab?",
+          choices: [
+            { name: "Water", emoji: "💧" },
+            { name: "Soda", emoji: "🥤" }
+          ],
+          answer: 0,
+          why: "Water hydrates you with zero sugar. A can of regular soda adds about 10 spoonfuls of added sugar your body doesn't need.",
+          benefit: "Drinking water helps you feel your best and ready to play again, and it's much kinder to your teeth than soda.",
+          extra: "Want bubbles? Sparkling water gives you fizz without all the sugar!"
+        },
+        {
+          prompt: "Dinner is in one hour and your tummy is rumbling. Quick snack, which one?",
+          choices: [
+            { name: "Candy", emoji: "🍬" },
+            { name: "Apple Slices", emoji: "🍎" }
+          ],
+          answer: 1,
+          why: "Apple slices have fiber and water to fill you up, while candy is just added sugar with nothing to slow it down.",
+          benefit: "The apple's fiber helps you feel full until dinner. Candy is mostly sugar — a fun treat, but not much of a snack.",
+          extra: "Add a little peanut butter to apple slices for even stronger staying power!"
+        },
+        {
+          prompt: "It's breakfast time before school. Which one keeps your brain powered until lunch?",
+          choices: [
+            { name: "Oatmeal with Berries", emoji: "🥣" },
+            { name: "Donut", emoji: "🍩" }
+          ],
+          answer: 0,
+          why: "Oatmeal is a whole grain full of fiber that digests slowly, while a donut is fried dough with lots of sugar and not much fiber or protein.",
+          benefit: "Oatmeal tends to keep you feeling full longer, which makes it a stronger start for a school morning. A donut is a fun treat, just not a filling one.",
+          extra: "Berries on top add natural sweetness, fiber, and vitamin C!"
+        },
+        {
+          prompt: "Movie night! You want something crunchy to munch. Pick the stronger snack:",
+          choices: [
+            { name: "Carrot Sticks & Cucumber", emoji: "🥕" },
+            { name: "Potato Chips", emoji: "🥔" }
+          ],
+          answer: 0,
+          why: "Veggies are full of water, fiber, and vitamins with a big crunch, while chips bring lots of fried oil and salt in every handful.",
+          benefit: "You get the crunch you want plus water, fiber, and vitamins. Chips are tasty too, but frying adds lots of fat and salt to them.",
+          extra: "Dip veggies in hummus or yogurt ranch for extra protein power!"
+        },
+        {
+          prompt: "You want something sweet after lunch. Which is the everyday winner?",
+          choices: [
+            { name: "Lollipop", emoji: "🍭" },
+            { name: "Strawberries", emoji: "🍓" }
+          ],
+          answer: 1,
+          why: "Strawberries are sweet by nature with fiber and vitamin C, while a lollipop is sugar that sits on your teeth for a long time.",
+          benefit: "Berries give you sweet flavor plus fiber and vitamin C. A lollipop is sugar that sits on your teeth for a long time, and sugar is rough on teeth.",
+          extra: "Nature's candy doesn't even need a wrapper!"
+        },
+        {
+          prompt: "Time for a drink with your lunch. Which one helps you grow strong bones?",
+          choices: [
+            { name: "Milk", emoji: "🥛" },
+            { name: "Sweetened Juice Drink", emoji: "🧃" }
+          ],
+          answer: 0,
+          why: "Milk brings calcium plus protein together, while many sweetened juice drinks are mostly sugar and water even with happy fruit on the box.",
+          benefit: "Milk brings calcium and protein that help build strong bones and teeth while you grow. A sweetened juice drink is mostly sugar and water, without those builders.",
+          extra: "Whole fruit beats juice — you get the fiber that juice leaves out!"
+        },
+        {
+          prompt: "Dessert time! Which one could you happily eat every day?",
+          choices: [
+            { name: "Ice Cream Sundae", emoji: "🍨" },
+            { name: "Yogurt with Blueberries", emoji: "🫐" }
+          ],
+          answer: 1,
+          why: "Yogurt and berries have protein, calcium, and fiber, while a sundae piles on lots of added sugar and creamy fat.",
+          benefit: "It tastes like dessert but brings protein and calcium your body can actually build with. A sundae is joyful for celebrations — just more sugar than fuel.",
+          extra: "Freeze yogurt with berries and it feels just like ice cream!"
+        },
+        {
+          prompt: "You're packing a snack for the car ride. Which travels best in your body?",
+          choices: [
+            { name: "Banana", emoji: "🍌" },
+            { name: "Cookie Pack", emoji: "🍪" }
+          ],
+          answer: 0,
+          why: "A banana is potassium, fiber, and natural energy in its own wrapper, while cookies are sugar and butter that fade fast.",
+          benefit: "A banana's fiber and potassium make it a snack with real staying power. Cookies are a fun treat, but they don't give your body much to build with.",
+          extra: "Lots of athletes pack bananas — easy fuel that travels anywhere!"
+        },
+        {
+          prompt: "Pasta night! Pasta gives energy — how do you turn it into a power plate?",
+          choices: [
+            { name: "Pasta All By Itself", emoji: "🍝" },
+            { name: "Pasta + Chicken + Peas", emoji: "🍗" }
+          ],
+          answer: 1,
+          why: "Pasta alone is mostly energy with not much fiber or protein. Adding chicken brings protein and peas bring fiber and vitamins.",
+          benefit: "Now your favorite dinner has all three teams: energy from pasta, building power from chicken, and vitamins and fiber from peas.",
+          extra: "Carrots, broccoli, or meatballs work the same magic on pasta or rice night!"
+        },
+        {
+          prompt: "It's rice night! Which plate keeps you fueled longer?",
+          choices: [
+            { name: "Rice + Egg + Carrots", emoji: "🍚" },
+            { name: "Rice All By Itself", emoji: "🍙" }
+          ],
+          answer: 0,
+          why: "Rice gives energy, an egg adds protein, and carrots add fiber and vitamin A. Together they cover way more of what your body uses.",
+          benefit: "Protein and fiber alongside rice help you feel full and fueled longer than rice on its own.",
+          extra: "Beans, chicken, or fish are other great protein teammates for rice!"
+        },
+        {
+          prompt: "Chicken for dinner! Which version is the everyday protein pick?",
+          choices: [
+            { name: "Fried Chicken Nuggets", emoji: "🍗" },
+            { name: "Grilled Chicken Strips", emoji: "🍽️" }
+          ],
+          answer: 1,
+          why: "Both start as chicken, but nuggets are usually coated and fried, adding lots of oil and salt. Grilled or baked chicken is protein without the fried jacket.",
+          benefit: "You get the muscle-building protein either way — grilled just skips the extra fried fat and salt, so it can be an everyday food.",
+          extra: "Nuggets aren't banned — they're just the sometimes version of chicken!"
+        },
+        {
+          prompt: "Popcorn time! Which bowl is the everyday one?",
+          choices: [
+            { name: "Air-Popped Popcorn", emoji: "🍿" },
+            { name: "Extra-Buttery Movie Popcorn", emoji: "🎬" }
+          ],
+          answer: 0,
+          why: "Air-popped popcorn is a whole grain with fiber and just a little salt. Movie popcorn adds lots of butter, oil, and salt on top.",
+          benefit: "You still get the big crunchy bowl — the air-popped version just brings fiber without all the extra fat and salt.",
+          extra: "Want a flavor boost? A sprinkle of cheese or cinnamon on air-popped popcorn is tasty!"
+        },
+        {
+          prompt: "Burger night at home! Which plate is the stronger build?",
+          choices: [
+            { name: "Burger + Big Pile of Fries", emoji: "🍟" },
+            { name: "Burger + Carrot Sticks + Berries", emoji: "🥕" }
+          ],
+          answer: 1,
+          why: "The homemade burger already brings protein. Carrots and berries add fiber, water, and vitamins, while fries add more fried oil and salt.",
+          benefit: "Your plate gets protein for muscles plus fruits and veggies for fiber and vitamins — the stuff that's easy to miss.",
+          extra: "Fries can visit sometimes. Fruits and veggies are the everyday sidekicks!"
+        },
+        {
+          prompt: "Saturday breakfast! Which plate gives you real morning power?",
+          choices: [
+            { name: "Donut All By Itself", emoji: "🍩" },
+            { name: "Eggs + Fruit, Donut as the Treat", emoji: "🍳" }
+          ],
+          answer: 1,
+          why: "A donut alone is fried dough and sugar with very little fiber or protein. Eggs bring protein and fruit brings fiber and vitamins — the donut still gets to come to breakfast, just as the treat alongside, not the whole meal.",
+          benefit: "You get building power from the eggs and fiber from the fruit, and the donut stays what it does best: a fun treat.",
+          extra: "Treats taste even better when a power breakfast comes first!"
+        },
+        {
+          prompt: "Mac and cheese night — your favorite! How do you give it a boost?",
+          choices: [
+            { name: "Mac and Cheese + Broccoli + Apple Slices", emoji: "🥦" },
+            { name: "Mac and Cheese + More Cheese Only", emoji: "🧀" }
+          ],
+          answer: 0,
+          why: "Mac and cheese is a sometimes food on its own — creamy and salty with little fiber. Broccoli and apple add the fiber and vitamins it's missing.",
+          benefit: "You still get your favorite, and the veggies and fruit fill in what your body needs more of.",
+          extra: "Peas stirred right into mac and cheese almost disappear — sneaky and yummy!"
+        },
+        {
+          prompt: "Breakfast battle! Which bowl is the stronger school-morning pick?",
+          choices: [
+            { name: "Whole-Grain Cereal with Milk", emoji: "🥣" },
+            { name: "Frosted Cereal", emoji: "🥣" }
+          ],
+          answer: 0,
+          why: "Whole-grain cereal brings fiber and much less added sugar, and milk adds protein and calcium. Frosted cereal coats its flakes in sugar, with barely any fiber.",
+          benefit: "Fiber plus protein tends to keep you feeling full longer — exactly what a school morning needs.",
+          extra: "Same bowl, same crunch — the label is where the difference hides!"
+        },
+        {
+          prompt: "You played hard at the park and you're thirsty. Which drink fits the moment?",
+          choices: [
+            { name: "Sports Drink", emoji: "🥤" },
+            { name: "Water", emoji: "💧" }
+          ],
+          answer: 1,
+          why: "Sports drinks are sugar water with a pinch of salts, made for athletes sweating for a very long time. For park play, water replaces what you sweat out, with no sugar.",
+          benefit: "Water hydrates you fully and is kind to your teeth. Sugar drinks are extras your body didn't ask for.",
+          extra: "Want flavour? Sparkling water with a squeeze of orange is the fizzy level-up!"
+        },
+        {
+          prompt: "Packing a lunchbox! Which snack team keeps you full until lunch?",
+          choices: [
+            { name: "String Cheese + Apple", emoji: "🧀" },
+            { name: "Fruit Snacks", emoji: "🍬" }
+          ],
+          answer: 0,
+          why: "String cheese brings protein and calcium, and the apple brings fiber and water. Fruit snacks are mostly sugar shaped like fruit, with almost no fiber.",
+          benefit: "Protein plus fiber is the staying-power team — it keeps your tummy happy for hours, not minutes.",
+          extra: "Real fruit beats fruit-flavoured every time!"
+        }
+      ];
+
+      var CONFIDENCE_QUESTIONS = [
+        {
+          prompt: "A friend says, 'My body looks different from yours.' What's a kind and true thing to remember?",
+          choices: [
+            { name: "Bodies come in lots of shapes — and all of them can be strong", emoji: "💛" },
+            { name: "Everyone should try to look the same", emoji: "🪞" }
+          ],
+          answer: 0,
+          why: "Just like faces and fingerprints, bodies naturally come in lots of shapes. Different doesn't mean better or worse — it just means different.",
+          benefit: "Remembering this helps you feel good in your own body and helps your friends feel good in theirs.",
+          extra: "A good coach cheers for every body on the team!"
+        },
+        {
+          prompt: "What's the BEST question to ask about a body?",
+          choices: [
+            { name: "How does it look?", emoji: "🪞" },
+            { name: "What amazing things can it DO?", emoji: "🏃" }
+          ],
+          answer: 1,
+          why: "Bodies are for living: running, swimming, climbing, scoring, dancing, and hugging the people you love. What your body can do matters way more than how it looks.",
+          benefit: "Thinking about what your body can do makes you notice your own strength and all the fun it lets you have.",
+          extra: "Try it: name three awesome things your body did today!"
+        },
+        {
+          prompt: "You had a brownie at a party and loved it. What does that say about you?",
+          choices: [
+            { name: "Nothing bad at all — treats are food, not a grade", emoji: "🎉" },
+            { name: "You earned a bad mark for the day", emoji: "📝" }
+          ],
+          answer: 0,
+          why: "Food is fuel and joy — never a grade on what kind of kid you are. A sometimes food is just a food you have sometimes. It says nothing bad about you.",
+          benefit: "Enjoying a treat without feeling bad about it is a healthy, happy way to think about food.",
+          extra: "Everyday foods most of the time, treats sometimes, zero guilt either way."
+        },
+        {
+          prompt: "You want to give a teammate a compliment that really lands. Which one is best?",
+          choices: [
+            { name: "You never gave up — that took real courage!", emoji: "🌟" },
+            { name: "Your hair is the prettiest on the team", emoji: "🎀" }
+          ],
+          answer: 0,
+          why: "The strongest compliments are about effort, kindness, and courage — things a person chose and worked for, not just how they look.",
+          benefit: "Compliments about effort make people want to keep trying, and they feel good for a long, long time.",
+          extra: "Try one today: thank someone for being kind, brave, or hard-working."
+        },
+        {
+          prompt: "At lunch, a friend's plate looks totally different from yours. What's the kind move?",
+          choices: [
+            { name: "Tell them your food is better than theirs", emoji: "🍽️" },
+            { name: "Let them enjoy it — we don't comment on other people's plates", emoji: "🤝" }
+          ],
+          answer: 1,
+          why: "Families eat different foods for all kinds of reasons, and nobody likes being judged at lunch. Other people's bodies and plates are their own business.",
+          benefit: "Keeping lunch kind and comment-free makes everyone feel safe and happy at the table.",
+          extra: "Curious about a new food? It's always okay to ask, 'What's that? It looks interesting!'"
+        },
+        {
+          prompt: "You miss a goal and feel frustrated. What's a strong way to talk to yourself?",
+          choices: [
+            { name: "I can try again — I'm learning and getting stronger", emoji: "💪" },
+            { name: "I'm just not good at anything", emoji: "☁️" }
+          ],
+          answer: 0,
+          why: "Every athlete misses sometimes. Talking to yourself like a good coach — kind and encouraging — helps you get back up and try again.",
+          benefit: "Kind self-talk builds real confidence, the kind that lasts even on hard days.",
+          extra: "Talk to yourself the way you'd talk to your best friend. You deserve that voice too."
+        }
+      ];
+
+      var TIERS = [
+        { id: "power", name: "Power Fuel", emoji: "💪", cls: "rung-power", hint: "Top rung — does the most for you" },
+        { id: "everyday", name: "Everyday", emoji: "⚡", cls: "rung-everyday", hint: "Energy staples for every day" },
+        { id: "middle", name: "Middle", emoji: "🔀", cls: "rung-middle", hint: "In between — how it's made matters" },
+        { id: "sometimes", name: "Sometimes", emoji: "🎉", cls: "rung-sometimes", hint: "The Sometimes rung — treats for once in a while" }
+      ];
+      var TIER_BY_NAME = {
+        "Apple": 0, "Broccoli": 0, "Carrots": 0, "Banana": 0, "Eggs": 0, "Strawberries": 0, "Water": 0, "Chicken": 0, "Yogurt": 0, "Grapes": 0, "Cucumber": 0, "Orange": 0, "Blueberries": 0, "Milk": 0, "Sweet Potato": 0,
+        "Pasta": 1, "Rice": 1, "Naan Bread": 1, "Air-Popped Popcorn": 1, "Oatmeal": 1, "Cheese": 1,
+        "Mac and Cheese": 2, "Homemade Hamburger": 2, "Movie Popcorn": 2, "Chicken Nuggets": 2,
+        "Candy": 3, "Soda": 3, "Donut": 3, "French Fries": 3, "Ice Cream": 3, "Cookies": 3, "Potato Chips": 3, "Birthday Cake": 3, "Gummy Bears": 3, "Chocolate Bar": 3, "Marshmallows": 3, "Ramen Noodles": 3, "Fast-Food Burger and Fries": 3, "Sour Patch Kids": 3, "Brownies": 3,
+        "Salmon": 0, "Watermelon": 0, "Peach": 0, "Pear": 0, "Mango": 0, "Kiwi": 0, "Pineapple": 0, "Cherries": 0, "Bell Peppers": 0, "Edamame": 0, "Avocado": 0, "Cherry Tomatoes": 0, "Garden Salad": 0, "Sparkling Water": 0, "Shrimp": 0, "Beans": 0, "Cantaloupe": 0,
+        "Whole-Grain Cereal": 1, "String Cheese": 1, "Spaghetti and Meatballs": 1, "Hummus and Pita": 1, "Corn on the Cob": 1, "Fruit Smoothie": 1, "Applesauce": 1, "Peanut Butter": 1, "Mixed Nuts": 1, "Olives": 1, "Bagel": 1, "Chicken Noodle Soup": 1, "Coconut Water": 1,
+        "Pancakes": 2, "Waffles": 2, "Toast and Jam": 2, "Orange Juice": 2, "Yogurt Tube": 2, "PB&J Sandwich": 2, "Crackers": 2, "Granola Bar": 2, "Pretzels": 2, "Trail Mix": 2, "Pizza": 2, "Tacos": 2, "Quesadillas": 2, "Grilled Cheese": 2, "Dumplings": 2, "Burrito": 2, "Raisins": 2, "Chocolate Milk": 2, "Fruit Cup": 2, "Pickles": 2, "Croissant": 2, "Blueberry Muffin": 2, "Turkey Slices": 2, "Fish Sticks": 2, "Veggie Burger": 2, "Hash Browns": 2, "Hot Chocolate": 2,
+        "Frosted Cereal": 3, "Bacon": 3, "Sausage Links": 3, "Fruit Snacks": 3, "Hot Dogs": 3, "Lollipop": 3, "Ice Pop": 3, "Cupcake": 3, "Lemonade": 3, "Sports Drink": 3, "Honey": 3, "Milkshake": 3
+      };
+      var TIER_WHY_EXTRA = {
+        0: " It sits on the top rung because it brings a lot your body can use — protein, fiber, vitamins, or water — with little added sugar, salt, or fried fat.",
+        1: " It sits on the Everyday rung because it is mainly energy fuel: great every day, and strongest when protein and veggies join it on the plate.",
+        2: " It sits in the Middle because it is in between: it brings something useful, but how it is made — creamy sauce, frying, butter, or what comes with it — moves it down a rung from the plainer version.",
+        3: " It sits on the Sometimes rung because it is mostly added sugar, salt, or fried fat with little fiber or protein to build with. That makes it a treat, not a fail — favourite foods live here too, just not as everyday fuel."
+      };
+      var TIER_ITEMS = SORT_FOODS.filter(function(f){ return TIER_BY_NAME.hasOwnProperty(f.name); }).map(function(f){
+        var t = TIER_BY_NAME[f.name];
+        return { name: f.name, emoji: f.emoji, tier: t, why: f.why + TIER_WHY_EXTRA[t], benefit: f.benefit, extra: f.extra };
+      });
+
+      var LABEL_CHALLENGES = [
+        { product: "Berry Crunch Bars", emoji: "🍓", serving: "1 bar", sugar: "14g", protein: "2g", fiber: "1g", ingredients: "Sugar, oats, corn syrup, dried berries, oil", prompt: "Detective mission: Find it on the label — how much sugar is in one bar?", choices: [{name:"2 grams",emoji:"🔍"},{name:"14 grams",emoji:"🔎"}], answer: 1, why: "The label lists 14 grams of sugar in one small bar. Reading that number is the detective skill — it is printed right in the Nutrition Facts.", benefit: "Knowing the sugar number helps your family decide if a food is an everyday fuel or a sometimes treat.", extra: "Detectives always check the serving size first — all the numbers are for one bar." },
+        { product: "Peanut Power Bites", emoji: "🥜", serving: "4 bites", sugar: "5g", protein: "7g", fiber: "3g", ingredients: "Peanuts, oats, honey, cocoa", prompt: "Detective mission: What is the FIRST ingredient? That one is in there the most.", choices: [{name:"Peanuts",emoji:"🥜"},{name:"Honey",emoji:"🍯"}], answer: 0, why: "Ingredients are listed in order by amount, and peanuts are first — so peanuts make up the biggest share of these bites.", benefit: "When a protein food like peanuts is first, you know the snack brings protein your body can use to build and repair.", extra: "If sugar is the first ingredient, that is a strong clue it is a sometimes food." },
+        { product: "Sweet O's Cereal", emoji: "🥣", serving: "1 cup", sugar: "12g", protein: "2g", fiber: "1g", ingredients: "Sugar, corn flour, oat flour, cocoa, salt", prompt: "Detective mission: The first ingredient is sugar. What does that clue tell you?", choices: [{name:"It's mostly a sometimes treat",emoji:"🎉"},{name:"It's an everyday power food",emoji:"💪"}], answer: 0, why: "Sugar is listed first, so it is the biggest ingredient, and the label shows 12 grams of sugar with only 1 gram of fiber.", benefit: "Spotting sugar first helps you choose a breakfast with more fiber and protein to keep you feeling full longer.", extra: "Cereals with a grain first and less sugar are the stronger everyday pick." },
+        { product: "Berry Yogurt Cup", emoji: "🥛", serving: "1 cup", sugar: "6g", protein: "9g", fiber: "1g", ingredients: "Milk, strawberries, live cultures", prompt: "Use the whole label: 6g sugar, 9g protein, milk first. Everyday or sometimes?", choices: [{name:"Everyday food",emoji:"💪"},{name:"Sometimes food",emoji:"🎉"}], answer: 0, why: "This fictional label shows protein from yogurt, a short ingredient list starting with milk, and a smaller amount of sugar than the sweet treats in this game.", benefit: "Protein and calcium in yogurt help your body build and repair and support strong bones while you grow.", extra: "Yogurt cups can be very different — detectives compare the sugar number before choosing." },
+        { product: "Fizz Cola", emoji: "🥤", serving: "1 can", sugar: "39g", protein: "0g", fiber: "0g", ingredients: "Carbonated water, sugar, colour, caffeine flavour", prompt: "Use the whole label: 39g sugar and no protein or fiber. Everyday or sometimes?", choices: [{name:"Sometimes food",emoji:"🎉"},{name:"Everyday food",emoji:"💪"}], answer: 0, why: "The label shows a large amount of sugar in one can and no protein or fiber. Water is the everyday drink that hydrates without added sugar.", benefit: "Choosing water most of the time is kinder to your teeth and gives your body hydration without added sugar.", extra: "39 grams is about 10 teaspoons of sugar — detectives picture the teaspoons to make the number real." },
+        { product: "Whole Grain Crackers", emoji: "🍘", serving: "12 crackers", sugar: "2g", protein: "3g", fiber: "3g", ingredients: "Whole wheat flour, oil, seeds, salt", prompt: "Detective mission: How much fiber is in one serving?", choices: [{name:"3 grams",emoji:"🔎"},{name:"12 grams",emoji:"🔍"}], answer: 0, why: "The label lists 3 grams of fiber for 12 crackers — and 12 is the number of crackers, not the fiber. Detectives read the line, not just the biggest number.", benefit: "Fiber helps your digestion and helps you feel full, so checking the fiber line is a useful detective habit.", extra: "Whole wheat flour is first here — a grain first is a good clue." },
+        { product: "Fruit Chews", emoji: "🍬", serving: "1 pouch", sugar: "18g", protein: "0g", fiber: "0g", ingredients: "Corn syrup, sugar, fruit juice from concentrate, citric acid", prompt: "Detective mission: What is the first ingredient in these fruit chews?", choices: [{name:"Real fruit pieces",emoji:"🍎"},{name:"Corn syrup (a sugar)",emoji:"🍬"}], answer: 1, why: "Corn syrup is first, so a sugar is the biggest ingredient, and the label shows 18 grams of sugar with no protein or fiber.", benefit: "Reading the first ingredient helps you tell a fruit-flavoured treat from a food made mostly of fruit.", extra: "A whole apple or berries give you fiber that chews and juice leave out." },
+        { product: "Oat & Honey Granola", emoji: "🥣", serving: "1/2 cup", sugar: "11g", protein: "4g", fiber: "3g", ingredients: "Oats, honey, oil, nuts, dried fruit", prompt: "Tricky one! Oats are first, but sugar is 11g. Best detective call?", choices: [{name:"A sometimes-leaning snack — enjoy a small bowl",emoji:"🧐"},{name:"Definitely everyday, no need to check",emoji:"✅"}], answer: 0, why: "This one is mixed: oats and nuts bring fiber and some protein, but honey adds up to 11 grams of sugar in a small serving. Good detectives hold both clues at once.", benefit: "Learning that some foods sit in the middle helps you enjoy them in a smaller portion alongside protein or fruit.", extra: "Not every label is a simple yes or no — that is why detectives read more than one line." },
+        { product: "Choco Puffs Cereal", emoji: "🍫", serving: "1 cup", sugar: "13g", protein: "1g", fiber: "1g", ingredients: "Sugar, corn flour, cocoa, oil, salt", prompt: "Detective mission: Sugar is the FIRST ingredient and there's 13g of it. What's your call?", choices: [{name:"A sometimes treat",emoji:"🎉"},{name:"An everyday power food",emoji:"💪"}], answer: 0, why: "Sugar is listed first, so it's the biggest ingredient, and this fictional label shows 13 grams of sugar with only 1 gram of fiber and 1 gram of protein.", benefit: "Spotting sugar in first place helps you pick a breakfast with more fiber and protein to keep you feeling full longer.", extra: "Chocolate flavour doesn't make it a power food — detectives read ingredients, not pictures." },
+        { product: "Oat Squares Cereal", emoji: "🥣", serving: "3/4 cup", sugar: "5g", protein: "5g", fiber: "4g", ingredients: "Whole grain oats, almonds, a touch of honey", prompt: "Use the whole label: whole grains first, 4g fiber, 5g protein. Best detective call?", choices: [{name:"An everyday-leaning breakfast",emoji:"💪"},{name:"Mostly a treat",emoji:"🎉"}], answer: 0, why: "This fictional label starts with whole grain oats and shows real fiber and protein, with a smaller sugar number than the treat cereals in this game.", benefit: "Fiber and protein together help you feel full, which makes this a stronger school-morning pick.", extra: "There is a little honey, so it's not perfect — detectives weigh all the clues, and most here point strong." }
+      ];
+
+      var MISSIONS = [
+        { emoji: "🍗", title: "Protein at One Meal", desc: "As a family, add a protein to one meal a day this week — chicken, eggs, beans, yogurt, cheese, fish, or peanut butter. Notice who finds the tastiest one.", tip: "Breakfast counts too: eggs or yogurt are easy morning wins." },
+        { emoji: "💧", title: "The Great Drink Swap", desc: "Everyone picks one sugary drink this week and swaps it for water, milk, or sparkling water with a squeeze of fruit. One swap, whole family, together.", tip: "Let the kids pick the fruit that goes in the sparkling water." },
+        { emoji: "🛒", title: "Grocery Store Fruit Hunt", desc: "At the store, your family hunts for a fruit nobody has tried before. Buy one, take it home, and everyone tastes it together.", tip: "Dragon fruit, kiwi berries, or a new kind of apple all count." },
+        { emoji: "🍽️", title: "Build a Power Plate", desc: "At dinner, build a plate together with three teams: an energy food (pasta, rice, naan), a protein, and a fruit or veggie. Name each team out loud as it lands.", tip: "Kids are the plate builders — grown-ups are the taste-testers." },
+        { emoji: "🔎", title: "Kitchen Label Hunt", desc: "Pick three foods from your kitchen as a family. Find the sugar number and the first ingredient on each label. Which one surprised you most?", tip: "Let your best detective lead the hunt — check the sugar first, then the first ingredient." },
+        { emoji: "🥕", title: "Crunch Swap Night", desc: "Movie or game night: set out a crunchy veggie plate (carrots, cucumber, peppers) next to your usual snack and see which crunch disappears first.", tip: "Add hummus or yogurt ranch for dipping power." },
+        { emoji: "🍳", title: "Power Breakfast Crew", desc: "One morning this week, the family builds breakfast together: eggs or yogurt, fruit, and a whole grain. Treats can visit after — breakfast comes first.", tip: "Weekend mornings are perfect for this one." },
+        { emoji: "🌟", title: "Compliment Round", desc: "At dinner, everyone gives one compliment about effort, kindness, or courage — never about looks. 'You kept trying' beats 'you look nice' every time.", tip: "Grown-ups go first, so kids hear how it sounds." }
+      ];
+
+      var CHEERS = ["You got it!", "Nailed it!", "Super sorter!", "Way to go!", "Exactly right!", "Brain power!"];
+      var OOPS_LINES = ["Good try!", "So close!", "Tricky one!", "Now you know!"];
+
+      // ---------------- State ----------------
+      var state = {
+        mode: "sort",
+        deck: [],
+        index: 0,
+        score: 0,
+        stars: 0,
+        streak: 0,
+        bestStreak: 0,
+        answered: false,
+        isDaily: false,
+        dailyFirst: [],
+        dailyLabel: "",
+        closeCount: 0
+      };
+      var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      function todayKey() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
+      function todayLabel() { var d = new Date(); return MONTHS[d.getMonth()] + " " + d.getDate(); }
+
+      // ---------------- Show-Up Stars (one per day Daily Fuel Five is finished) ----------------
+      // Stored generically for the device/browser.
+      // A star is for SHOWING UP and finishing, never for score.
+      var SHOWUP_KEY = "foodQuizShowUpDays_v1";
+      var showUpMemoryFallback = null; // used only if localStorage is unavailable in this browser
+      var showUpStorageAvailable = true;
+      (function checkShowUpStorage(){
+        try {
+          var testKey = "__showup_test__";
+          window.localStorage.setItem(testKey, "1");
+          window.localStorage.removeItem(testKey);
+          showUpStorageAvailable = true;
+        } catch (e) {
+          showUpStorageAvailable = false;
+        }
+      })();
+      function loadShowUpDays() {
+        if (showUpMemoryFallback) return showUpMemoryFallback.slice();
+        if (!showUpStorageAvailable) return [];
+        try {
+          var raw = window.localStorage.getItem(SHOWUP_KEY);
+          if (!raw) return [];
+          var parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed)) return [];
+          // Keep only YYYY-MM-DD strings, de-duplicated and sorted
+          var seen = {};
+          var out = [];
+          parsed.forEach(function(v){
+            if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) && !seen[v]) { seen[v] = true; out.push(v); }
+          });
+          out.sort();
+          return out;
+        } catch (e) {
+          return [];
+        }
+      }
+      function saveShowUpDays(days) {
+        var clean = days.slice().sort();
+        showUpMemoryFallback = clean.slice();
+        if (!showUpStorageAvailable) return false;
+        try {
+          window.localStorage.setItem(SHOWUP_KEY, JSON.stringify(clean));
+          return true;
+        } catch (e) {
+          showUpStorageAvailable = false;
+          return false;
+        }
+      }
+      function trailTextForCount(count) {
+        if (count <= 0) return "";
+        var show = Math.min(count, 20);
+        var s = "";
+        for (var i = 0; i < show; i++) s += "⭐";
+        if (count > 20) s += " +" + (count - 20) + " more";
+        return s;
+      }
+      function renderShowUpStars() {
+        var days = loadShowUpDays();
+        var count = days.length;
+        var trailEl = document.getElementById("showup-trail");
+        var countEl = document.getElementById("showup-count");
+        var deviceEl = document.getElementById("showup-device-note");
+        if (trailEl) {
+          if (count === 0) {
+            trailEl.textContent = "Play today's five to earn your first star!";
+            trailEl.classList.add("empty");
+          } else {
+            trailEl.textContent = trailTextForCount(count);
+            trailEl.classList.remove("empty");
+          }
+        }
+        if (countEl) {
+          countEl.textContent = "Days you've played: " + count + (count === 1 ? " day" : " days");
+        }
+        if (deviceEl && !showUpStorageAvailable) {
+          deviceEl.textContent = "⭐ This browser couldn't save stars for later, so they'll stay while you're here — on most phones and browsers they save on the device.";
+        }
+        return days;
+      }
+      function recordShowUpForToday() {
+        // Returns { isNew: boolean, days: array, count: number }
+        var key = todayKey();
+        var days = loadShowUpDays();
+        var already = days.indexOf(key) !== -1;
+        if (!already) {
+          days.push(key);
+          saveShowUpDays(days);
+          days = loadShowUpDays();
+          // If storage failed, load may return memory fallback — ensure today is counted in-session
+          if (days.indexOf(key) === -1) {
+            days.push(key);
+            showUpMemoryFallback = days.slice().sort();
+          }
+        }
+        renderShowUpStars();
+        return { isNew: !already, days: days, count: days.length };
+      }
+      function hashSeed(str) { var h = 2166136261; for (var i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+      function seededRand(seed) { var a = seed >>> 0; return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+      function seededShuffle(arr, rand) { var a = arr.slice(); for (var i=a.length-1;i>0;i--){ var j = Math.floor(rand()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+      function pickSeeded(arr, rand) { return arr[Math.floor(rand()*arr.length)]; }
+
+      // ---------------- Sound (tiny WebAudio bleeps) ----------------
+      var audioCtx = null;
+      function beep(freq, start, dur) {
+        if (!audioCtx) return;
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime + start);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + dur);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + start);
+        osc.stop(audioCtx.currentTime + start + dur);
+      }
+      function soundGood() { beep(523, 0, 0.15); beep(659, 0.1, 0.15); beep(784, 0.2, 0.25); }
+      function soundOops() { beep(330, 0, 0.18); beep(262, 0.15, 0.28); }
+      function soundWin() { beep(523, 0, 0.14); beep(659, 0.12, 0.14); beep(784, 0.24, 0.14); beep(1047, 0.36, 0.35); }
+
+      // ---------------- Helpers ----------------
+      function $(id) { return document.getElementById(id); }
+      function shuffle(arr) {
+        var a = arr.slice();
+        for (var i = a.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var t = a[i]; a[i] = a[j]; a[j] = t;
+        }
+        return a;
+      }
+      function showScreen(id) {
+        ["screen-start", "screen-game", "screen-results", "screen-missions"].forEach(function (s) {
+          $(s).classList.toggle("hidden", s !== id);
+        });
+        window.scrollTo({ top: 0 });
+      }
+      function updateHud() {
+        // Scoring is trimmed to two numbers only (Daily Five result + Show-Up Stars),
+        // so there is no on-screen points/streak counter to update.
+      }
+
+      // ---------------- Confetti ----------------
+      var confettiCtx = $("confetti").getContext("2d");
+      var confettiPieces = [];
+      var confettiRunning = false;
+      function sizeConfetti() {
+        $("confetti").width = window.innerWidth;
+        $("confetti").height = window.innerHeight;
+      }
+      window.addEventListener("resize", sizeConfetti);
+      sizeConfetti();
+      function launchConfetti(count) {
+        var colors = ["#2e9e4f", "#f08c1e", "#d94f6a", "#2f8fd0", "#ffd23f"];
+        for (var i = 0; i < count; i++) {
+          confettiPieces.push({
+            x: Math.random() * window.innerWidth,
+            y: -20 - Math.random() * window.innerHeight * 0.4,
+            w: 7 + Math.random() * 7,
+            h: 10 + Math.random() * 8,
+            vy: 2 + Math.random() * 3,
+            vx: -1.5 + Math.random() * 3,
+            rot: Math.random() * Math.PI,
+            vr: -0.1 + Math.random() * 0.2,
+            color: colors[Math.floor(Math.random() * colors.length)]
+          });
+        }
+        if (!confettiRunning) { confettiRunning = true; requestAnimationFrame(confettiTick); }
+      }
+      function confettiTick() {
+        confettiCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        confettiPieces = confettiPieces.filter(function (p) { return p.y < window.innerHeight + 30; });
+        confettiPieces.forEach(function (p) {
+          p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+          confettiCtx.save();
+          confettiCtx.translate(p.x, p.y);
+          confettiCtx.rotate(p.rot);
+          confettiCtx.fillStyle = p.color;
+          confettiCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          confettiCtx.restore();
+        });
+        if (confettiPieces.length > 0) {
+          requestAnimationFrame(confettiTick);
+        } else {
+          confettiRunning = false;
+          confettiCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        }
+      }
+
+      // ---------------- Mode picker ----------------
+      $("mode-row").addEventListener("click", function (e) {
+        var card = e.target.closest("[data-mode]");
+        if (!card) return;
+        state.mode = card.getAttribute("data-mode");
+        this.querySelectorAll(".mode-card").forEach(function (c) {
+          c.classList.toggle("selected", c === card);
+        });
+      });
+
+      // ---------------- Game flow ----------------
+      $("btn-start").addEventListener("click", function () {
+        if (!audioCtx) {
+          try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (err) { audioCtx = null; }
+        }
+        if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+        startGame();
+      });
+
+      function wrapItem(type, ref) { return { type: type, ref: ref, isRepeat: false, requeued: false, choiceOrder: null }; }
+      function buildDailyDeck() {
+        var rand = seededRand(hashSeed("fuel-five-" + todayKey()));
+        var sortPick = pickSeeded(SORT_FOODS, rand);
+        var swapPick = pickSeeded(SWAP_ROUNDS, rand);
+        var confPick = pickSeeded(CONFIDENCE_QUESTIONS, rand);
+        var labelPick = pickSeeded(LABEL_CHALLENGES, rand);
+        var pools = [
+          function(){ return wrapItem("sort", pickSeeded(SORT_FOODS, rand)); },
+          function(){ return wrapItem("swap", pickSeeded(SWAP_ROUNDS, rand)); },
+          function(){ return wrapItem("confidence", pickSeeded(CONFIDENCE_QUESTIONS, rand)); },
+          function(){ return wrapItem("label", pickSeeded(LABEL_CHALLENGES, rand)); },
+          function(){ return wrapItem("tier", pickSeeded(TIER_ITEMS, rand)); }
+        ];
+        var fifth = pools[Math.floor(rand()*pools.length)]();
+        var deck = [wrapItem("sort", sortPick), wrapItem("swap", swapPick), wrapItem("confidence", confPick), wrapItem("label", labelPick), fifth];
+        // Avoid an exact duplicate fifth card
+        if (fifth.ref === sortPick || fifth.ref === swapPick || fifth.ref === confPick || fifth.ref === labelPick) {
+          deck[4] = pools[Math.floor(rand()*pools.length)]();
+        }
+        return seededShuffle(deck, rand);
+      }
+      function buildMixedDeck() {
+        // PLAY mode: quietly rotates every question type so nobody has to pick a mode.
+        var items = [];
+        shuffle(SORT_FOODS).slice(0, 3).forEach(function(f){ items.push(wrapItem("sort", f)); });
+        shuffle(SWAP_ROUNDS).slice(0, 2).forEach(function(q){ items.push(wrapItem("swap", q)); });
+        shuffle(TIER_ITEMS).slice(0, 2).forEach(function(q){ items.push(wrapItem("tier", q)); });
+        shuffle(CONFIDENCE_QUESTIONS).slice(0, 2).forEach(function(q){ items.push(wrapItem("confidence", q)); });
+        shuffle(LABEL_CHALLENGES).slice(0, 1).forEach(function(q){ items.push(wrapItem("label", q)); });
+        return shuffle(items);
+      }
+      function startGame(modeOverride) {
+        var mode = modeOverride || state.mode;
+        state.isDaily = (mode === "daily");
+        state.dailyFirst = [];
+        state.dailyLabel = todayLabel();
+        if (state.isDaily) {
+          state.deck = buildDailyDeck();
+        } else if (mode === "mix") {
+          state.deck = buildMixedDeck();
+        } else if (mode === "sort") {
+          state.deck = shuffle(SORT_FOODS).slice(0, 10).map(function(f){ return wrapItem("sort", f); });
+        } else if (mode === "confidence") {
+          state.deck = shuffle(CONFIDENCE_QUESTIONS).map(function(q){ return wrapItem("confidence", q); });
+        } else if (mode === "label") {
+          state.deck = shuffle(LABEL_CHALLENGES).map(function(q){ return wrapItem("label", q); });
+        } else if (mode === "tier") {
+          state.deck = shuffle(TIER_ITEMS).slice(0, 10).map(function(q){ return wrapItem("tier", q); });
+        } else {
+          state.deck = shuffle(SWAP_ROUNDS).slice(0, 10).map(function(q){ return wrapItem("swap", q); });
+        }
+        state.activeMode = mode;
+        state.index = 0;
+        state.closeCount = 0;
+        state.score = 0;
+        state.streak = 0;
+        state.bestStreak = 0;
+        state.answered = false;
+        updateHud();
+        showScreen("screen-game");
+        renderQuestion();
+      }
+
+      function currentItem() { return state.deck[state.index]; }
+      function renderQuestion() {
+        state.answered = false;
+        var item = currentItem();
+        var total = state.deck.length;
+        if (state.isDaily) {
+          $("round-label").textContent = item.isRepeat ? ("Daily Fuel Five — " + state.dailyLabel + " • Bonus retry") : ("Daily Fuel Five — " + state.dailyLabel + " • Question " + (state.index + 1) + " of 5");
+        } else {
+          $("round-label").textContent = "Question " + (state.index + 1) + " of " + total;
+        }
+        $("progress-fill").style.width = (state.index / total * 100) + "%";
+        $("feedback").className = "feedback";
+        $("fb-extra").classList.add("hidden");
+        $("fb-more-btn").classList.add("hidden");
+        $("btn-next").classList.add("hidden");
+        $("btn-next").textContent = state.index === total - 1 ? "Finish ▶" : "Next ➜";
+        $("repeat-badge").classList.toggle("hidden", !item.isRepeat);
+        $("sort-layout").classList.add("hidden");
+        $("swap-layout").classList.add("hidden");
+        $("label-layout").classList.add("hidden");
+        $("tier-layout").classList.add("hidden");
+
+        if (item.type === "sort") {
+          var food = item.ref;
+          $("prompt").textContent = item.isRepeat ? "This one's back for another try! Everyday or sometimes?" : "Is this an everyday food or a sometimes food?";
+          $("sort-layout").classList.remove("hidden");
+          $("food-emoji").textContent = food.emoji;
+          $("food-name").textContent = food.name;
+          $("btn-everyday").disabled = false;
+          $("btn-sometimes").disabled = false;
+          $("btn-everyday").classList.remove("correct-pick", "dim");
+          $("btn-sometimes").classList.remove("correct-pick", "dim");
+        } else if (item.type === "tier") {
+          var tf = item.ref;
+          $("prompt").textContent = item.isRepeat ? "This one's back for another try! Which rung does it live on?" : "Tier Time! Which rung does this food live on?";
+          $("tier-layout").classList.remove("hidden");
+          $("tier-emoji").textContent = tf.emoji;
+          $("tier-name").textContent = tf.name;
+          var trow = $("tier-buttons"); trow.innerHTML = "";
+          TIERS.forEach(function(tier, ti){
+            var b = document.createElement("button");
+            b.className = "tier-btn " + tier.cls;
+            b.setAttribute("data-tier", ti);
+            b.innerHTML = tier.emoji + " " + tier.name + "<small>" + tier.hint + "</small>";
+            b.addEventListener("click", function(){ answerTier(ti); });
+            trow.appendChild(b);
+          });
+        } else if (item.type === "label") {
+          var lab = item.ref;
+          $("prompt").textContent = lab.prompt;
+          $("label-layout").classList.remove("hidden");
+          $("label-emoji").textContent = lab.emoji;
+          $("label-product").textContent = lab.product;
+          $("label-serving").textContent = lab.serving;
+          $("label-sugar").textContent = lab.sugar;
+          $("label-protein").textContent = lab.protein;
+          $("label-fiber").textContent = lab.fiber;
+          $("label-ingredients").textContent = lab.ingredients;
+          renderChoices($("label-choices"), item);
+        } else {
+          var round = item.ref;
+          $("prompt").textContent = round.prompt;
+          $("swap-layout").classList.remove("hidden");
+          renderChoices($("swap-row"), item);
+        }
+      }
+      function renderChoices(row, item) {
+        row.innerHTML = "";
+        if (!item.choiceOrder) item.choiceOrder = Math.random() < 0.5 ? [0, 1] : [1, 0];
+        item.choiceOrder.forEach(function (choiceIdx) {
+          var choice = item.ref.choices[choiceIdx];
+          var btn = document.createElement("button");
+          btn.className = "swap-btn";
+          btn.setAttribute("data-choice", choiceIdx);
+          btn.innerHTML = '<span class="swap-emoji">' + choice.emoji + '</span><span class="swap-name">' + choice.name + "</span>";
+          btn.addEventListener("click", function () { answerChoice(choiceIdx, row); });
+          row.appendChild(btn);
+        });
+      }
+
+      function showFeedback(correct, titleExtra, whyText, benefitText, extraText) {
+        var fb = $("feedback");
+        var isClose = (correct === "close");
+        var isGood = (correct === true);
+        fb.className = "feedback show " + (isGood ? "good" : isClose ? "close" : "oops");
+        var cheer = isGood ? CHEERS[Math.floor(Math.random() * CHEERS.length)] + " ⭐" : isClose ? "Close! 🎯" : OOPS_LINES[Math.floor(Math.random() * OOPS_LINES.length)];
+        $("fb-title").textContent = titleExtra ? (cheer + " " + titleExtra) : cheer;
+        var curType = currentItem() ? currentItem().type : "";
+        if (curType === "confidence") {
+          $("fb-why-label").textContent = "💛 Why this matters";
+          $("fb-benefit-label").textContent = "🌟 How it helps you";
+        } else if (curType === "label") {
+          $("fb-why-label").textContent = "🔎 Detective clue — how to read it";
+          $("fb-benefit-label").textContent = "💪 What it does for you";
+        } else if (curType === "tier") {
+          $("fb-why-label").textContent = "🪜 Why it lives on this rung";
+          $("fb-benefit-label").textContent = "💪 What it does for you";
+        } else {
+          $("fb-why-label").textContent = "🔍 Why — what's inside?";
+          $("fb-benefit-label").textContent = "💪 What it does for you";
+        }
+        $("fb-why").textContent = whyText || "";
+        $("fb-benefit").textContent = benefitText || "";
+        var extraEl = $("fb-extra");
+        var moreBtn = $("fb-more-btn");
+        if (extraText) {
+          extraEl.textContent = "⭐ " + extraText;
+          extraEl.classList.add("hidden");
+          moreBtn.classList.remove("hidden");
+          moreBtn.textContent = "Tap to learn more ▾";
+        } else {
+          extraEl.classList.add("hidden");
+          moreBtn.classList.add("hidden");
+        }
+        $("btn-next").classList.remove("hidden");
+        var total = state.deck.length;
+        $("progress-fill").style.width = ((state.index + 1) / total * 100) + "%";
+      }
+
+      function queueRepeatIfMissed(correct) {
+        if (correct) return;
+        var item = currentItem();
+        if (!item || item.isRepeat || item.requeued) return;
+        item.requeued = true;
+        var clone = { type: item.type, ref: item.ref, isRepeat: true, requeued: true, choiceOrder: null };
+        var insertAt = Math.min(state.deck.length, state.index + 3);
+        if (insertAt <= state.index) insertAt = state.deck.length;
+        state.deck.splice(insertAt, 0, clone);
+      }
+      function registerAnswer(correct) {
+        // Practice games are unscored: no points, no streaks, no tallies.
+        // Only the Daily Five tracks first-try answers, for its end-of-game squares.
+        var item = currentItem();
+        if (state.isDaily && item && !item.isRepeat) {
+          state.dailyFirst.push(!!correct);
+        }
+        queueRepeatIfMissed(correct);
+        if (correct) {
+          soundGood();
+          launchConfetti(24);
+        } else {
+          soundOops();
+        }
+        // If a repeat was just added, the finish label may need updating
+        if (state.index < state.deck.length - 1) $("btn-next").textContent = "Next ➜";
+      }
+
+      function answerSort(picked) {
+        if (state.answered) return;
+        state.answered = true;
+        var food = currentItem().ref;
+        var correct = picked === food.kind;
+        var correctBtn = food.kind === "everyday" ? $("btn-everyday") : $("btn-sometimes");
+        var pickedBtn = picked === "everyday" ? $("btn-everyday") : $("btn-sometimes");
+        correctBtn.classList.add("correct-pick");
+        if (!correct) pickedBtn.classList.add("dim");
+        $("btn-everyday").disabled = true;
+        $("btn-sometimes").disabled = true;
+        var titleExtra = food.name + " is a" + (food.kind === "everyday" ? "n everyday" : " sometimes") + " food!";
+        if (!correct) titleExtra = "Actually — " + titleExtra;
+        var itemSort = currentItem();
+        registerAnswer(correct);
+        var extraSort = food.extra;
+        if (!correct && itemSort && !itemSort.isRepeat) extraSort = (extraSort ? extraSort + " " : "") + "Don't worry — this one's back for another try in a little bit.";
+        showFeedback(correct, titleExtra, food.why, food.benefit, extraSort);
+      }
+
+      function answerTier(pickedTier) {
+        if (state.answered) return;
+        state.answered = true;
+        var item = currentItem();
+        var tf = item.ref;
+        var actual = tf.tier;
+        var diff = Math.abs(pickedTier - actual);
+        var exact = diff === 0;
+        var isClose = diff === 1;
+        var buttons = $("tier-buttons").querySelectorAll(".tier-btn");
+        buttons.forEach(function(b){
+          b.disabled = true;
+          var ti = parseInt(b.getAttribute("data-tier"), 10);
+          if (ti === actual) b.classList.add("correct-pick");
+          else if (ti === pickedTier && isClose) b.classList.add("close-pick");
+          else if (ti === pickedTier) b.classList.add("dim");
+          else b.classList.add("dim");
+          if (ti === actual) b.classList.remove("dim");
+        });
+        if (isClose) state.closeCount++;
+        // Daily first-try + spaced repetition: only an exact hit counts as a first-try win
+        registerAnswer(exact);
+        var tierName = TIERS[actual].emoji + " " + TIERS[actual].name;
+        var titleExtra, kind;
+        if (exact) {
+          kind = true;
+          titleExtra = tf.name + " lives on " + tierName + " — exactly right! Remember, it's a ladder, not a test: every rung has favourites on it.";
+        } else if (isClose) {
+          kind = "close";
+          var direction = actual > pickedTier ? "one rung down" : "one rung up";
+          titleExtra = tf.name + " is " + direction + " from where you put it — it lives on " + tierName + ". Here's why it's " + direction + ":";
+        } else {
+          kind = false;
+          titleExtra = tf.name + " lives on " + tierName + ". Here's why it sits there:";
+        }
+        var extraTier = tf.extra;
+        if (!exact && !item.isRepeat) extraTier = (extraTier ? extraTier + " " : "") + "Don't worry — this one's back for another try in a little bit.";
+        showFeedback(kind, titleExtra, tf.why, tf.benefit, extraTier);
+      }
+
+      function answerChoice(choiceIdx, row) {
+        if (state.answered) return;
+        state.answered = true;
+        var item = currentItem();
+        var round = item.ref;
+        var correct = choiceIdx === round.answer;
+        var buttons = row.querySelectorAll(".swap-btn");
+        buttons.forEach(function (b) {
+          b.disabled = true;
+          if (parseInt(b.getAttribute("data-choice"), 10) === round.answer) {
+            b.classList.add("correct-pick");
+          } else {
+            b.classList.add("dim");
+          }
+        });
+        registerAnswer(correct);
+        var titleExtra;
+        if (item.type === "confidence") {
+          titleExtra = correct ? "That's the kind, strong way to think!" : "The kind, strong answer is the other one — now you know it!";
+        } else if (item.type === "label") {
+          titleExtra = correct ? "Detective work — you read the label right!" : "Good detective try! The label clue points to the other answer.";
+          if (item.isRepeat) titleExtra += " This one came back and you gave it another go!";
+        } else {
+          titleExtra = correct ? round.choices[round.answer].name + " is the stronger pick!" : "The stronger pick is " + round.choices[round.answer].name + "!";
+        }
+        // If this was a miss, let them know it will return kindly
+        var extraNote = round.extra;
+        if (!correct && !item.isRepeat) {
+          extraNote = (extraNote ? extraNote + " " : "") + "Don't worry — this one's back for another try in a little bit.";
+        }
+        showFeedback(correct, titleExtra, round.why, round.benefit, extraNote);
+      }
+      // Backwards-compatible name (not used by new layout)
+      function answerSwap(choiceIdx, btn) { answerChoice(choiceIdx, $("swap-row")); }
+
+      $("fb-more-btn").addEventListener("click", function () {
+        var extra = $("fb-extra");
+        var isHidden = extra.classList.contains("hidden");
+        if (isHidden) {
+          extra.classList.remove("hidden");
+          this.textContent = "Hide extra fact ▴";
+        } else {
+          extra.classList.add("hidden");
+          this.textContent = "Tap to learn more ▾";
+        }
+      });
+
+      $("btn-everyday").addEventListener("click", function () { answerSort("everyday"); });
+      $("btn-sometimes").addEventListener("click", function () { answerSort("sometimes"); });
+
+      $("btn-next").addEventListener("click", function () {
+        state.index++;
+        if (state.index >= state.deck.length) {
+          showResults();
+        } else {
+          renderQuestion();
+        }
+      });
+
+      // ---------------- Results ----------------
+      function showResults() {
+        showScreen("screen-results");
+        var isDaily = state.isDaily;
+        var total, score;
+        if (isDaily) {
+          total = 5;
+          score = state.dailyFirst.filter(function(x){ return x; }).length;
+        } else {
+          total = state.deck.length;
+          score = state.score;
+        }
+        // Only two numbers exist anywhere in this game: the Daily Five result
+        // (squares + X/5) and Show-Up Stars. Practice games show neither a
+        // star rating nor a numeric score — just a warm finish message.
+        $("big-stars").classList.add("hidden");
+        if (isDaily) {
+          $("score-line").textContent = "You got " + score + " out of " + total + "!";
+          $("score-line").classList.remove("hidden");
+        } else {
+          $("score-line").classList.add("hidden");
+        }
+        // Daily Wordle-style squares
+        var dailyBox = $("daily-result");
+        if (isDaily) {
+          dailyBox.classList.remove("hidden");
+          var squares = state.dailyFirst.map(function(ok){ return ok ? "🟩" : "🟨"; }).join("");
+          // Pad if a repeat flow shortened first-attempt list (should be 5)
+          while (squares.length < 0) squares += "🟨";
+          $("wordle-squares").textContent = squares;
+          var shareText = "Fuel Five " + state.dailyLabel + " " + squares + " " + score + "/5";
+          $("daily-share-text").textContent = shareText;
+          dailyBox.setAttribute("data-share", shareText);
+          $("copy-confirm").classList.add("hidden");
+          // Show-Up Star: finishing today's five earns it — any score counts.
+          try {
+            var showUp = recordShowUpForToday();
+            var srBox = $("showup-result");
+            if (srBox) {
+              srBox.classList.remove("hidden");
+              $("showup-result-title").textContent = showUp.isNew ? "⭐ You earned a Show-Up Star!" : "⭐ Today's Show-Up Star is already yours!";
+              $("showup-result-trail").textContent = trailTextForCount(showUp.count);
+              $("showup-result-count").textContent = "Days you've played: " + showUp.count + (showUp.count === 1 ? " day" : " days");
+              $("showup-result-note").textContent = showUp.isNew
+                ? "You got this star just for finishing — any score counts, finishing is the win! Your stars never disappear, and missing a day never breaks anything."
+                : "You already earned today's star by finishing earlier today — nice showing up again! Your stars never disappear, and missing a day never breaks anything.";
+            }
+          } catch (e) { /* show-up stars are a bonus; never block results */ }
+        } else {
+          dailyBox.classList.add("hidden");
+          var srBox2 = $("showup-result");
+          if (srBox2) srBox2.classList.add("hidden");
+        }
+        if (isDaily) {
+          $("result-title").textContent = score === 5 ? "PERFECT FIVE! 🏆" : "Today's Fuel Five done — good playing!";
+          $("result-message").textContent = "You finished today's five. Green squares are first-try wins, yellow squares are ones you learned — and any tricky one that came back gave you a second try. Tomorrow brings a fresh five!";
+        } else {
+          $("result-title").textContent = "You finished! 🎉";
+          $("result-message").textContent = "Great playing — every question taught your brain something new about fuel and treats. Play again any time!";
+        }
+        if (!isDaily && state.activeMode === "confidence") {
+          $("result-title").textContent = "Strong hearts! 💛";
+          $("result-message").textContent = "Remember the coach rules: bodies come in lots of shapes and all can be strong, the best question is what your body can DO, food is fuel and joy — never a grade, and the best compliments are about effort, kindness, and courage.";
+        }
+        if (!isDaily && state.activeMode === "label") {
+          $("result-message").textContent += " Detective tip: check serving size, sugar, and the first ingredient — in that order.";
+        }
+        if (!isDaily && state.activeMode === "tier") {
+          $("result-title").textContent = "Great ranking! 🏆";
+          $("result-message").textContent = "Remember the Tier Time rule: health is a ladder, not a pass/fail test, how a food is made can move it a rung, and favourite foods live on every rung.";
+        }
+        $("btn-again").textContent = isDaily ? "Play Today's Five Again 🔁" : "Play Again 🔁";
+        soundWin();
+        launchConfetti(130);
+      }
+
+      $("btn-again").addEventListener("click", function () {
+        if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+        startGame(state.activeMode || state.mode);
+      });
+      $("btn-home").addEventListener("click", function () {
+        renderShowUpStars();
+        showScreen("screen-start");
+      });
+      $("btn-copy-result").addEventListener("click", function () {
+        var text = $("daily-result").getAttribute("data-share") || $("daily-share-text").textContent;
+        function done(){ $("copy-confirm").classList.remove("hidden"); $("copy-confirm").textContent = "Copied! Share it with family."; }
+        function fallback(){
+          var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+          try { document.execCommand("copy"); done(); } catch(e){ $("copy-confirm").classList.remove("hidden"); $("copy-confirm").textContent = text; }
+          document.body.removeChild(ta);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(fallback);
+        } else { fallback(); }
+      });
+
+      // ---------------- Daily & Missions wiring ----------------
+      function ensureAudio() {
+        if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (err) { audioCtx = null; } }
+        if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+      }
+      $("btn-daily").addEventListener("click", function(){ ensureAudio(); startGame("daily"); });
+      $("btn-play").addEventListener("click", function(){ ensureAudio(); startGame("mix"); });
+      $("btn-all-games").addEventListener("click", function(){
+        var panel = $("all-games-panel");
+        var nowHidden = panel.classList.toggle("hidden");
+        this.setAttribute("aria-expanded", nowHidden ? "false" : "true");
+        this.textContent = nowHidden ? "All Games — pick a specific one ▾" : "All Games — hide ▴";
+      });
+      function weekIndex() {
+        var d = new Date(); var days = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+        return Math.floor(days / 7);
+      }
+      function renderMissions() {
+        var idx = ((weekIndex() % MISSIONS.length) + MISSIONS.length) % MISSIONS.length;
+        var feat = MISSIONS[idx];
+        $("mission-featured").innerHTML = '<span class="m-kicker">⭐ Mission of the Week — for the whole family</span><span class="m-title">' + feat.emoji + ' ' + feat.title + '</span><p>' + feat.desc + '</p><p><strong>Family tip:</strong> ' + feat.tip + '</p>';
+        var grid = $("missions-grid"); grid.innerHTML = "";
+        MISSIONS.forEach(function(m, i){
+          var card = document.createElement("div"); card.className = "mission-card";
+          card.innerHTML = '<span class="m-emoji">' + m.emoji + '</span><span class="m-title">' + m.title + (i===idx ? ' ⭐ This week' : '') + '</span><p>' + m.desc + '</p><p><strong>Tip:</strong> ' + m.tip + '</p>';
+          grid.appendChild(card);
+        });
+      }
+      renderMissions();
+      renderShowUpStars();
+      if ($("daily-date-label")) $("daily-date-label").textContent = todayLabel();
+      $("btn-missions").addEventListener("click", function(){ renderMissions(); showScreen("screen-missions"); });
+      $("btn-missions-back").addEventListener("click", function(){ showScreen("screen-start"); });
+    </script>
+  </body>
+</html>
